@@ -8,6 +8,9 @@
 import { Component, Vue } from 'vue-property-decorator';
 import CustomCanvas from '@/components/CustomCanvas.vue';
 
+import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
+import 'buefy/dist/buefy.css';
+
 @Component({
   components: {CustomCanvas}
 })
