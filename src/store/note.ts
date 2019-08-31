@@ -49,14 +49,27 @@ export class Note {
 
   public repaint(): void {
     this.currentLayer.removeChildren();
-    this.currentPage.lines.forEach((line: Konva.Line) => {
+
+    if (this.pageIndex > 0) {
+      this.relativePage(-1).lines.forEach((line: Line) => {
+        const onionLine: Line = line.clone({stroke: 'grey'});
+        this.currentLayer.add(onionLine);
+      });
+    }
+
+    this.currentPage.lines.forEach((line: Line) => {
       this.currentLayer.add(line);
     });
+
     this.currentLayer.batchDraw();
   }
 
+  public relativePage(relativeIndex: number) {
+    return this.pages[this.pageIndex + relativeIndex];
+  }
+
   public get currentPage(): Page {
-    return this.pages[this.pageIndex];
+    return this.relativePage(0);
   }
 
   public get currentLayer(): Konva.Layer {
