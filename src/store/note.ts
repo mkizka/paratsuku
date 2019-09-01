@@ -36,8 +36,9 @@ export class Note {
       this.paint();
     });
 
-    this.stage.on('mousemove touchmove', () => {
+    this.stage.on('mousemove touchmove', e => {
       if (!this.isPaint) return;
+      e.evt.preventDefault();
 
       const pos = this.stage!.getPointerPosition();
       this.currentPage.updateLine(pos);
