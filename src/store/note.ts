@@ -22,15 +22,14 @@ export class Note {
       const pos = this.stage!.getPointerPosition();
 
       this.currentPage.lines.push(
-        new Konva.Line({
+        new Line({
           stroke: '#df4b26',
           strokeWidth: 5,
           globalCompositeOperation: 'source-over',
           points: [pos.x, pos.y]
         } as Konva.LineConfig)
       );
-
-      this.repaint();
+      this.paint();
     });
 
     this.stage.on('mousemove touchmove', () => {
@@ -38,33 +37,41 @@ export class Note {
 
       const pos = this.stage!.getPointerPosition();
       this.currentPage.addLine(pos);
-      this.repaint();
+      this.paint();
     });
 
     this.stage.on('mouseup touchend', () => {
       this.isPaint = false;
-      this.repaint();
+
+      this.currentPage.endLine();
+      this.paint();
     });
   }
 
-  public repaint(): void {
+  public paint(): void {
+    const children = this.currentLayer.getChildren();
+    const latestLinePainted = children[children.length - 1] as Line;
+
+    // 最新のLineが途中であれば、それのみ差し替えて描画することで処理を軽減する
+    if (latestLinePainted && !latestLinePainted.isFinished) {
+      latestLinePainted.remove();
+    }
+    this.currentLayer.add(this.currentPage.lines[this.currentPage.lines.length - 1]);
+
+    this.currentLayer.batchDraw();
+  }
+
+  public repaintAll(): void {
     this.currentLayer.removeChildren();
 
-    if (this.pageIndex > 0) {
-      this.relativePage(-1).lines.forEach((line: Line) => {
-        const onionLine: Line = line.clone({stroke: 'grey'});
-        this.currentLayer.add(onionLine);
-      });
-    }
-
-    this.currentPage.lines.forEach((line: Line) => {
+    this.currentPage.lines.forEach((line: Konva.Line) => {
       this.currentLayer.add(line);
     });
 
     this.currentLayer.batchDraw();
   }
 
-  public relativePage(relativeIndex: number) {
+  public relativePage(relativeIndex: number): Page {
     return this.pages[this.pageIndex + relativeIndex];
   }
 
@@ -81,12 +88,12 @@ export class Note {
     if (this.pageIndex >= this.pages.length) {
       this.pages.push(new Page());
     }
-    this.repaint();
+    this.repaintAll();
   }
 
   public backPage(): void {
     if (this.pageIndex > 0) this.pageIndex--;
-    this.repaint();
+    this.repaintAll();
   }
 }
 
@@ -101,6 +108,10 @@ export class Page {
     this.lines.push(lastLine!);
   }
 
+  public endLine() {
+    this.lines[this.lines.length - 1].isFinished = true;
+  }
+
   public undo(): void {
   }
 
@@ -109,6 +120,7 @@ export class Page {
 }
 
 export class Line extends Konva.Line {
+  public isFinished = false;
 }
 
 export const noteInstance = Vue.observable(new Note());
