@@ -6,7 +6,7 @@ export class Note {
   public stage: Konva.Stage | undefined;
   public pages: Array<Page> = [new Page()];
   public pageIndex: number = 0;
-  private isPaint: boolean = false;
+  private hasPointerDown: boolean = false;
   private pen: Pen = penInstance;
 
   initStage(stageConfig: Konva.ContainerConfig) {
@@ -22,7 +22,7 @@ export class Note {
     this.stage.add(onionLayer);
 
     this.stage.on('mousedown touchstart', () => {
-      this.isPaint = true;
+      this.hasPointerDown = true;
 
       const pos = this.stage!.getPointerPosition();
       this.currentPage.addLine(pos);
@@ -30,7 +30,7 @@ export class Note {
     });
 
     this.stage.on('mousemove touchmove', e => {
-      if (!this.isPaint) return;
+      if (!this.hasPointerDown) return;
       e.evt.preventDefault();
 
       const pos = this.stage!.getPointerPosition();
@@ -39,7 +39,7 @@ export class Note {
     });
 
     this.stage.on('mouseup touchend', () => {
-      this.isPaint = false;
+      this.hasPointerDown = false;
 
       this.currentPage.endLine();
       this.paint();
