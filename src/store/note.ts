@@ -61,7 +61,7 @@ export class Note {
     if (latestLinePainted && !latestLinePainted.isFinished) {
       latestLinePainted.remove();
     }
-    this.currentLayer.add(this.currentPage.lines[this.currentPage.lines.length - 1]);
+    this.currentLayer.add(this.currentPage.latestLine);
 
     this.currentLayer.batchDraw();
   }
@@ -78,13 +78,16 @@ export class Note {
   }
 
   private paintOnion(): void {
+    this.onionLayer.removeChildren();
+
     if (this.pageIndex > 0) {
       this.relativePage(-1).lines.forEach((line: Line) => {
         const onionLine: Line = line.clone({stroke: 'grey'});
         this.onionLayer.add(onionLine);
       });
-      this.onionLayer.batchDraw();
     }
+
+    this.onionLayer.batchDraw();
   }
 
   public relativePage(relativeIndex: number): Page {
@@ -121,6 +124,10 @@ export class Page {
   public lines: Array<Line> = [];
   public redoableLines: Array<Line> = [];
 
+  public get latestLine() {
+    return this.lines[this.lines.length - 1];
+  }
+
   public updateLine(pos: { x: number, y: number }): void {
     const lastLine = this.lines.pop();
     let newPoints = lastLine!.points().concat([pos.x, pos.y]);
@@ -129,7 +136,7 @@ export class Page {
   }
 
   public endLine() {
-    this.lines[this.lines.length - 1].isFinished = true;
+    this.latestLine.isFinished = true;
   }
 
   public undo(): void {
