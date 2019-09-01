@@ -40,7 +40,7 @@ export class Note {
       if (!this.isPaint) return;
 
       const pos = this.stage!.getPointerPosition();
-      this.currentPage.addLine(pos);
+      this.currentPage.updateLine(pos);
       this.paint();
     });
 
@@ -120,7 +120,7 @@ export class Page {
   public lines: Array<Line> = [];
   public redoableLines: Array<Line> = [];
 
-  public addLine(pos: { x: number, y: number }): void {
+  public updateLine(pos: { x: number, y: number }): void {
     const lastLine = this.lines.pop();
     let newPoints = lastLine!.points().concat([pos.x, pos.y]);
     lastLine!.points(newPoints);
@@ -142,7 +142,7 @@ export class Page {
   public redo(): void {
     if (this.redoableLines.length > 0) {
       const redoablLatest = this.redoableLines.pop();
-      this.lines.push(redoablLatest!)
+      this.lines.push(redoablLatest!);
     }
     noteInstance.repaintAll();
   }
