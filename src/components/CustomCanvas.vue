@@ -2,7 +2,9 @@
   <div>
     <button @click="note.pushPage()">push</button>
     <button @click="note.backPage()">back</button>
-    <button @click="pen.toggle()">toggle</button>
+    <button @click="pen.toggle()">{{ pen.type }}</button>
+    <button @click="note.currentPage.undo()">undo</button>
+    <button @click="note.currentPage.redo()">redo</button>
     <div id="customCanvasContainer"></div>
   </div>
 </template>

@@ -132,9 +132,19 @@ export class Page {
   }
 
   public undo(): void {
+    if (this.lines.length > 0) {
+      const removedLatest = this.lines.pop();
+      this.redoableLines.push(removedLatest!);
+    }
+    noteInstance.repaintAll();
   }
 
   public redo(): void {
+    if (this.redoableLines.length > 0) {
+      const redoablLatest = this.redoableLines.pop();
+      this.lines.push(redoablLatest!)
+    }
+    noteInstance.repaintAll();
   }
 }
 
