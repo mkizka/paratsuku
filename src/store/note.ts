@@ -1,13 +1,15 @@
 import Vue from 'vue';
 import Konva from 'konva';
-import { Pen, penInstance } from './pen';
+import { penInstance } from './pen';
 
 export class Note {
   public stage: Konva.Stage | undefined;
   public pages: Array<Page> = [new Page()];
   public pageIndex: number = 0;
+  public fps: number = 12;
+  public isPlaying: boolean = false;
+  private playInterval: number | undefined = undefined;
   private hasPointerDown: boolean = false;
-  private pen: Pen = penInstance;
 
   initStage(stageConfig: Konva.ContainerConfig) {
     this.stage = new Konva.Stage({
@@ -99,10 +101,32 @@ export class Note {
     return this.stage!.getLayers()[0] as Konva.Layer;
   }
 
-  public pushPage(): void {
+  public get pageStateDisplay() {
+    return `${this.pageIndex + 1}/${this.pages.length}`;
+  }
+
+  public play(): void {
+    if (!this.isPlaying) {
+      this.onionLayer.hide();
+      this.playInterval = setInterval(() => {
+        this.pushPage(true);
+      }, 1000 / this.fps);
+    } else {
+      this.onionLayer.show();
+      clearInterval(this.playInterval);
+      this.playInterval = undefined;
+    }
+    this.isPlaying = !this.isPlaying;
+  }
+
+  public pushPage(isLoop: boolean = false): void {
     this.pageIndex++;
     if (this.pageIndex >= this.pages.length) {
-      this.pages.push(new Page());
+      if (isLoop) {
+        this.pageIndex = 0;
+      } else {
+        this.pages.push(new Page());
+      }
     }
     this.repaintAll();
   }
