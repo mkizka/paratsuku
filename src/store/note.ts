@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import Konva from 'konva';
+import { Pen, penInstance } from './pen';
 
 export class Note {
   public stage: Konva.Stage | undefined;
   public pages: Array<Page> = [new Page()];
   public pageIndex: number = 0;
-  private isPaint = false;
+  private isPaint: boolean = false;
+  private pen: Pen = penInstance;
 
   initStage(stageConfig: Konva.ContainerConfig) {
     this.stage = new Konva.Stage({
@@ -25,9 +27,9 @@ export class Note {
 
       this.currentPage.lines.push(
         new Line({
-          stroke: '#df4b26',
-          strokeWidth: 5,
-          globalCompositeOperation: 'source-over',
+          stroke: this.pen.stroke,
+          strokeWidth: this.pen.strokeWidth,
+          globalCompositeOperation: this.pen.type,
           points: [pos.x, pos.y]
         } as Konva.LineConfig)
       );
