@@ -23,16 +23,9 @@ export class Note {
 
     this.stage.on('mousedown touchstart', () => {
       this.isPaint = true;
-      const pos = this.stage!.getPointerPosition();
 
-      this.currentPage.lines.push(
-        new Line({
-          stroke: this.pen.stroke,
-          strokeWidth: this.pen.strokeWidth,
-          globalCompositeOperation: this.pen.type,
-          points: [pos.x, pos.y]
-        } as Konva.LineConfig)
-      );
+      const pos = this.stage!.getPointerPosition();
+      this.currentPage.addLine(pos);
       this.paint();
     });
 
@@ -126,6 +119,17 @@ export class Page {
 
   public get latestLine() {
     return this.lines[this.lines.length - 1];
+  }
+
+  public addLine(pos: { x: number, y: number }): void {
+    this.lines.push(
+      new Line({
+        stroke: penInstance.stroke,
+        strokeWidth: penInstance.strokeWidth,
+        globalCompositeOperation: penInstance.type,
+        points: [pos.x, pos.y]
+      } as Konva.LineConfig)
+    );
   }
 
   public updateLine(pos: { x: number, y: number }): void {
