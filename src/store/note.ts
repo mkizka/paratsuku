@@ -16,6 +16,8 @@ export class Note {
 
     const layer = new Konva.Layer();
     this.stage.add(layer);
+    const onionLayer = new Konva.Layer();
+    this.stage.add(onionLayer);
 
     this.stage.on('mousedown touchstart', () => {
       this.isPaint = true;
@@ -68,7 +70,18 @@ export class Note {
       this.currentLayer.add(line);
     });
 
+    this.paintOnion();
     this.currentLayer.batchDraw();
+  }
+
+  private paintOnion(): void {
+    if (this.pageIndex > 0) {
+      this.relativePage(-1).lines.forEach((line: Line) => {
+        const onionLine: Line = line.clone({stroke: 'grey'});
+        this.onionLayer.add(onionLine);
+      });
+      this.onionLayer.batchDraw();
+    }
   }
 
   public relativePage(relativeIndex: number): Page {
@@ -80,6 +93,10 @@ export class Note {
   }
 
   public get currentLayer(): Konva.Layer {
+    return this.stage!.getLayers()[1] as Konva.Layer;
+  }
+
+  public get onionLayer(): Konva.Layer {
     return this.stage!.getLayers()[0] as Konva.Layer;
   }
 
