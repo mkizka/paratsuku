@@ -1,14 +1,5 @@
 <template>
-  <div>
-    <button @click="note.pushPage()">push</button>
-    <button @click="note.backPage()">back</button>
-    <button @click="pen.toggle()">{{ pen.type }}</button>
-    <button @click="note.currentPage.undo()">undo</button>
-    <button @click="note.currentPage.redo()">redo</button>
-    <button @click="note.play()">{{ note.isPlaying ? 'stop' : 'play' }}</button>
-    <span>{{ note.pageStateDisplay }}</span>
-    <div id="customCanvasContainer"></div>
-  </div>
+  <div id="CustomCanvas"></div>
 </template>
 
 <script lang="ts">
@@ -23,7 +14,7 @@ export default class CustomCanvas extends Vue {
 
   mounted() {
     this.note.initStage({
-      container: 'customCanvasContainer',
+      container: 'CustomCanvas',
       width: window.innerWidth,
       height: window.innerHeight
     });

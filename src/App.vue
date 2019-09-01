@@ -1,18 +1,20 @@
 <template>
   <div id="app">
     <CustomCanvas/>
+    <BottomMenu/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import CustomCanvas from '@/components/CustomCanvas.vue';
+import BottomMenu from '@/components/BottomMenu.vue';
 
 import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import 'buefy/dist/buefy.css';
 
 @Component({
-  components: {CustomCanvas}
+  components: {BottomMenu, CustomCanvas}
 })
 export default class App extends Vue {
 }

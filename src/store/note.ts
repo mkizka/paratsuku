@@ -8,8 +8,8 @@ export class Note {
   public pageIndex: number = 0;
   public fps: number = 12;
   public isPlaying: boolean = false;
+  public hasPointerDown: boolean = false;
   private playInterval: number | undefined = undefined;
-  private hasPointerDown: boolean = false;
 
   initStage(stageConfig: Konva.ContainerConfig) {
     this.stage = new Konva.Stage({
