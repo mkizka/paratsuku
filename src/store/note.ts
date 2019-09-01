@@ -3,11 +3,12 @@ import Konva from 'konva';
 import { penInstance } from './pen';
 
 export class Note {
-  public stage: Konva.Stage | undefined;
   public pages: Array<Page> = [new Page()];
   public pageIndex: number = 0;
   public fps: number = 12;
   public isPlaying: boolean = false;
+
+  private stage: Konva.Stage | undefined;
   private playInterval: number | undefined = undefined;
 
   initStage(stageConfig: Konva.ContainerConfig) {
@@ -22,6 +23,11 @@ export class Note {
     const onionLayer = new Konva.Layer();
     this.stage.add(onionLayer);
 
+    window.addEventListener('mousemove', (e) => {
+      if (e.clientX < 0 || this.stage!.width() < e.clientX
+        || e.clientY < 0 || this.stage!.height() < e.clientY) this.currentPage.endLine();
+    });
+
     this.stage.on('mousedown touchstart', () => {
       const pos = this.stage!.getPointerPosition();
       this.currentPage.addLine(pos);
@@ -33,7 +39,11 @@ export class Note {
       e.evt.preventDefault();
 
       const pos = this.stage!.getPointerPosition();
-      this.currentPage.updateLine(pos);
+      if (this.currentPage.latestLine.isFinished) {
+        this.currentPage.addLine(pos);
+      } else {
+        this.currentPage.updateLine(pos);
+      }
       this.paint();
     });
 
@@ -159,7 +169,9 @@ export class Page {
   }
 
   public endLine() {
-    this.latestLine.isFinished = true;
+    if (this.lines.length > 0) {
+      this.latestLine.isFinished = true;
+    }
   }
 
   public undo(): void {
