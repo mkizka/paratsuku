@@ -8,7 +8,6 @@ export class Note {
   public pageIndex: number = 0;
   public fps: number = 12;
   public isPlaying: boolean = false;
-  public hasPointerDown: boolean = false;
   private playInterval: number | undefined = undefined;
 
   initStage(stageConfig: Konva.ContainerConfig) {
@@ -24,15 +23,13 @@ export class Note {
     this.stage.add(onionLayer);
 
     this.stage.on('mousedown touchstart', () => {
-      this.hasPointerDown = true;
-
       const pos = this.stage!.getPointerPosition();
       this.currentPage.addLine(pos);
       this.paint();
     });
 
     this.stage.on('mousemove touchmove', e => {
-      if (!this.hasPointerDown) return;
+      if (e.evt.buttons !== 1) return;
       e.evt.preventDefault();
 
       const pos = this.stage!.getPointerPosition();
@@ -41,8 +38,6 @@ export class Note {
     });
 
     this.stage.on('mouseup touchend', () => {
-      this.hasPointerDown = false;
-
       this.currentPage.endLine();
       this.paint();
     });

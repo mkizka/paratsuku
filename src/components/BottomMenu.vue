@@ -26,7 +26,7 @@ export default class BottomMenu extends Vue {
 
     const avoidPointerHandler = {
       handleEvent: (event: MouseEvent) => {
-        this.isHidden = this.note.hasPointerDown && window.innerHeight - event.clientY < menuHeight + 40;
+        this.isHidden = event.buttons == 1 && window.innerHeight - event.clientY < menuHeight + 40;
       }
     } as EventListenerOrEventListenerObject;
 
