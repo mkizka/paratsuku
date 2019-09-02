@@ -39,11 +39,7 @@ export class Note {
       e.evt.preventDefault();
 
       const pos = this.stage!.getPointerPosition();
-      if (this.currentPage.latestLine.isFinished) {
-        this.currentPage.addLine(pos);
-      } else {
-        this.currentPage.updateLine(pos);
-      }
+      this.currentPage.updateLine(pos);
       this.paint();
     });
 
@@ -61,7 +57,9 @@ export class Note {
     if (latestLinePainted && !latestLinePainted.isFinished) {
       latestLinePainted.remove();
     }
-    this.currentLayer.add(this.currentPage.latestLine);
+    if (this.currentPage.lines.length > 0) {
+      this.currentLayer.add(this.currentPage.latestLine);
+    }
 
     this.currentLayer.batchDraw();
   }
@@ -125,6 +123,7 @@ export class Note {
   }
 
   public pushPage(isLoop: boolean = false): void {
+    this.currentPage.endLine();
     this.pageIndex++;
     if (this.pageIndex >= this.pages.length) {
       if (isLoop) {
@@ -137,6 +136,7 @@ export class Note {
   }
 
   public backPage(): void {
+    this.currentPage.endLine();
     if (this.pageIndex > 0) this.pageIndex--;
     this.repaintAll();
   }
@@ -162,10 +162,14 @@ export class Page {
   }
 
   public updateLine(pos: { x: number, y: number }): void {
-    const lastLine = this.lines.pop();
-    let newPoints = lastLine!.points().concat([pos.x, pos.y]);
-    lastLine!.points(newPoints);
-    this.lines.push(lastLine!);
+    if (this.lines.length === 0 || this.latestLine.isFinished) {
+      this.addLine(pos);
+    } else {
+      const lastLine = this.lines.pop();
+      let newPoints = lastLine!.points().concat([pos.x, pos.y]);
+      lastLine!.points(newPoints);
+      this.lines.push(lastLine!);
+    }
   }
 
   public endLine() {
