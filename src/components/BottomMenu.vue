@@ -1,12 +1,28 @@
 <template>
   <div id="BottomMenu" ref="menu" v-show="!isHidden">
-    <button @click="note.pushPage()">push</button>
-    <button @click="note.backPage()">back</button>
-    <button @click="pen.toggle()">{{ pen.type }}</button>
-    <button @click="note.currentPage.undo()">undo</button>
-    <button @click="note.currentPage.redo()">redo</button>
-    <button @click="note.play()">{{ note.isPlaying ? 'stop' : 'play' }}</button>
-    <span>{{ note.pageStateDisplay }}</span>
+    <b-button type="is-primary" @click="pen.toggle()">
+      <b-icon pack="fas" icon="pen" v-if="pen.type === 'source-over'"></b-icon>
+      <b-icon pack="fas" icon="eraser" v-else></b-icon>
+    </b-button>
+    <b-button type="is-primary" @click="note.currentPage.undo()"
+              :disabled="note.currentPage.lines.length === 0 || note.isPlaying">
+      <b-icon pack="fas" icon="undo"></b-icon>
+    </b-button>
+    <b-button type="is-primary" @click="note.currentPage.redo()"
+              :disabled="note.currentPage.redoableLines.length === 0 || note.isPlaying">
+      <b-icon pack="fas" icon="redo"></b-icon>
+    </b-button>
+    <b-button type="is-primary" style="width: 70px">{{ note.pageStateDisplay }}</b-button>
+    <b-button type="is-primary" @click="note.backPage()" :disabled="note.isPlaying">
+      <b-icon pack="fas" icon="chevron-left"></b-icon>
+    </b-button>
+    <b-button type="is-primary" @click="note.play()">
+      <b-icon pack="fas" icon="stop" v-if="note.isPlaying"></b-icon>
+      <b-icon pack="fas" icon="play" v-else></b-icon>
+    </b-button>
+    <b-button type="is-primary" @click="note.pushPage()" :disabled="note.isPlaying">
+      <b-icon pack="fas" icon="chevron-right"></b-icon>
+    </b-button>
   </div>
 </template>
 
@@ -14,6 +30,10 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { noteInstance, Note } from '@/store/note';
 import { penInstance, Pen } from '@/store/pen';
+
+import Buefy from 'buefy';
+
+Vue.use(Buefy);
 
 @Component
 export default class BottomMenu extends Vue {
@@ -57,5 +77,6 @@ export default class BottomMenu extends Vue {
   bottom: 20px;
   right: 0;
   left: 0;
+  opacity: 0.9;
 }
 </style>
