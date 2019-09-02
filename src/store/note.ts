@@ -163,6 +163,7 @@ export class Page {
         points: [pos.x, pos.y]
       } as Konva.LineConfig)
     );
+    this.redoableLines = [];
   }
 
   public updateLine(pos: { x: number, y: number }): void {
