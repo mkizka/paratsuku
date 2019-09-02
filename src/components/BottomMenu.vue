@@ -1,26 +1,30 @@
 <template>
   <div id="BottomMenu" ref="menu" v-show="!isHidden">
-    <b-button type="is-primary" @click="pen.toggle()">
+    <b-button type="is-primary" size="is-medium" @click="pen.toggle()">
       <b-icon pack="fas" icon="pen" v-if="pen.type === 'source-over'"></b-icon>
       <b-icon pack="fas" icon="eraser" v-else></b-icon>
     </b-button>
-    <b-button type="is-primary" @click="note.currentPage.undo()"
+    <b-button type="is-primary" size="is-medium" @click="note.currentPage.undo()"
               :disabled="note.currentPage.lines.length === 0 || note.isPlaying">
       <b-icon pack="fas" icon="undo"></b-icon>
     </b-button>
-    <b-button type="is-primary" @click="note.currentPage.redo()"
+    <b-button type="is-primary" size="is-medium" @click="note.currentPage.redo()"
               :disabled="note.currentPage.redoableLines.length === 0 || note.isPlaying">
       <b-icon pack="fas" icon="redo"></b-icon>
     </b-button>
-    <b-button type="is-primary" style="width: 70px">{{ note.pageStateDisplay }}</b-button>
-    <b-button type="is-primary" @click="note.backPage()" :disabled="note.isPlaying">
+    <b-button type="is-primary" size="is-medium" style="width: 90px">
+      {{ note.pageStateDisplay }}
+    </b-button>
+    <b-button type="is-primary" size="is-medium" @click="note.backPage()"
+              :disabled="note.isPlaying">
       <b-icon pack="fas" icon="chevron-left"></b-icon>
     </b-button>
-    <b-button type="is-primary" @click="note.play()">
+    <b-button type="is-primary" size="is-medium" @click="note.play()">
       <b-icon pack="fas" icon="stop" v-if="note.isPlaying"></b-icon>
       <b-icon pack="fas" icon="play" v-else></b-icon>
     </b-button>
-    <b-button type="is-primary" @click="note.pushPage()" :disabled="note.isPlaying">
+    <b-button type="is-primary" size="is-medium" @click="note.pushPage()"
+              :disabled="note.isPlaying">
       <b-icon pack="fas" icon="chevron-right"></b-icon>
     </b-button>
   </div>
