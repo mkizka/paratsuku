@@ -28,14 +28,16 @@ export class Note {
         || e.clientY < 0 || this.stage!.height() < e.clientY) this.currentPage.endLine();
     });
 
-    this.stage.on('mousedown touchstart', () => {
+    this.stage.on('mousedown touchstart', (e: { evt: MouseEvent | TouchEvent }) => {
+      if (e.evt instanceof TouchEvent && e.evt.touches.length > 1) return;
+
       const pos = this.stage!.getPointerPosition();
       this.currentPage.addLine(pos);
       this.paint();
     });
 
-    this.stage.on('mousemove touchmove', e => {
-      if (e.evt.buttons !== 1) return;
+    this.stage.on('mousemove touchmove', (e: { evt: MouseEvent | TouchEvent }) => {
+      if (e.evt instanceof MouseEvent && e.evt.buttons !== 1) return;
       e.evt.preventDefault();
 
       const pos = this.stage!.getPointerPosition();
@@ -43,7 +45,9 @@ export class Note {
       this.paint();
     });
 
-    this.stage.on('mouseup touchend', () => {
+    this.stage.on('mouseup touchend', (e: { evt: MouseEvent | TouchEvent }) => {
+      if (e.evt instanceof TouchEvent && e.evt.touches.length > 0) return;
+
       this.currentPage.endLine();
       this.paint();
     });
