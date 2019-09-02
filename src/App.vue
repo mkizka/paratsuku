@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <TopNavbar/>
     <CustomCanvas/>
     <BottomMenu/>
   </div>
@@ -9,12 +10,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import CustomCanvas from '@/components/CustomCanvas.vue';
 import BottomMenu from '@/components/BottomMenu.vue';
+import TopNavbar from '@/components/TopNavbar.vue';
 
 import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import 'buefy/dist/buefy.css';
 
 @Component({
-  components: {BottomMenu, CustomCanvas}
+  components: {TopNavbar, BottomMenu, CustomCanvas}
 })
 export default class App extends Vue {
 }
