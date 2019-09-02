@@ -23,15 +23,28 @@ export default class BottomMenu extends Vue {
 
   mounted() {
     const menuHeight = (this.$refs.menu as Element).clientHeight;
+    const offsetHeight = 40;
 
     const avoidPointerHandler = {
-      handleEvent: (event: MouseEvent) => {
-        this.isHidden = event.buttons == 1 && window.innerHeight - event.clientY < menuHeight + 40;
+      handleEvent: (event: MouseEvent | TouchEvent) => {
+        if (event instanceof MouseEvent) {
+          this.isHidden = event.buttons == 1 && window.innerHeight - event.clientY < menuHeight + offsetHeight;
+        } else {
+          this.isHidden = window.innerHeight - event.touches[0].clientY < menuHeight + offsetHeight;
+        }
+      }
+    } as EventListenerOrEventListenerObject;
+
+    const avoidPointerFinishedHandler = {
+      handleEvent: () => {
+        this.isHidden = false;
       }
     } as EventListenerOrEventListenerObject;
 
     document.addEventListener('mousemove', avoidPointerHandler);
     document.addEventListener('touchmove', avoidPointerHandler);
+    document.addEventListener('mouseup', avoidPointerFinishedHandler);
+    document.addEventListener('touchend', avoidPointerFinishedHandler);
   }
 }
 </script>
