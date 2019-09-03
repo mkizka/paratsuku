@@ -84,7 +84,7 @@ export class Note {
 
     if (this.pageIndex > 0) {
       this.relativePage(-1).lines.forEach((line: Line) => {
-        const onionLine: Line = line.clone({stroke: 'grey'});
+        const onionLine: Line = line.clone({color: 'grey'});
         this.onionLayer.add(onionLine);
       });
     }
@@ -157,7 +157,7 @@ export class Page {
   public addLine(pos: { x: number, y: number }): void {
     this.lines.push(
       new Line({
-        stroke: penInstance.stroke,
+        stroke: penInstance.color,
         strokeWidth: penInstance.strokeWidth,
         globalCompositeOperation: penInstance.type,
         points: [pos.x, pos.y]

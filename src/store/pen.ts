@@ -6,7 +6,7 @@ export enum PenType {
 }
 
 export class Pen {
-  public stroke: string = '#df4b26';
+  public color: string = '#df4b26';
   public strokeWidth: number = 5;
   public type: PenType = PenType.normal;
 
