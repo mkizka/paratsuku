@@ -1,43 +1,39 @@
 <template>
-  <div class="card">
-    <div class="card-content">
-      <div class="content">
-        <section>
-          <label class="label">ツール選択</label>
-          <b-field>
-            <b-radio-button
-              v-model="pen.type"
-              :native-value="penType.normal"
-              type="is-primary"
-            >
-              <b-icon pack="fas" icon="pen"></b-icon>
-              <span>ペン</span>
-            </b-radio-button>
-            <b-radio-button
-              v-model="pen.type"
-              :native-value="penType.eraser"
-              type="is-primary"
-            >
-              <b-icon pack="fas" icon="eraser"></b-icon>
-              <span>消しゴム</span>
-            </b-radio-button>
-          </b-field>
-          <b-field label="線の太さ">
-            <b-slider v-model="pen.strokeWidth" :min="1" :max="30"></b-slider>
-          </b-field>
-          <b-field label="色テーマ">
-            <b-select v-model="color">
-              <option
-                v-for="palette in colorSet"
-                :value="palette.color"
-                :key="palette.color">
-                {{ palette.label }}
-              </option>
-            </b-select>
-          </b-field>
-        </section>
-      </div>
-    </div>
+  <div class="modal-card">
+    <section class="modal-card-body">
+      <label class="label">ツール選択</label>
+      <b-field>
+        <b-radio-button
+          v-model="pen.type"
+          :native-value="penType.normal"
+          type="is-primary"
+        >
+          <b-icon pack="fas" icon="pen"></b-icon>
+          <span>ペン</span>
+        </b-radio-button>
+        <b-radio-button
+          v-model="pen.type"
+          :native-value="penType.eraser"
+          type="is-primary"
+        >
+          <b-icon pack="fas" icon="eraser"></b-icon>
+          <span>消しゴム</span>
+        </b-radio-button>
+      </b-field>
+      <b-field label="線の太さ">
+        <b-slider v-model="pen.strokeWidth" :min="1" :max="30"></b-slider>
+      </b-field>
+      <b-field label="色テーマ">
+        <b-select v-model="color">
+          <option
+            v-for="palette in colorSet"
+            :value="palette.color"
+            :key="palette.color">
+            {{ palette.label }}
+          </option>
+        </b-select>
+      </b-field>
+    </section>
   </div>
 </template>
 
