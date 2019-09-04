@@ -1,6 +1,6 @@
 <template>
   <div id="BottomMenu">
-    <b-modal :active.sync="hasModalActive" scroll="keep" has-modal-card>
+    <b-modal :active.sync="hasModalActive" has-modal-card>
       <SettingsCard/>
     </b-modal>
     <div :class="'bottom-menu-buttons' + (isHidden ? ' is-avoided' : '')" ref="menu">
