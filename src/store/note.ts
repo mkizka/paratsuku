@@ -22,6 +22,8 @@ export class Note {
     this.stage.add(layer);
     const onionLayer = new Konva.Layer();
     this.stage.add(onionLayer);
+    const backgroundLayer = new Konva.Layer();
+    this.stage.add(backgroundLayer);
 
     window.addEventListener('mousemove', (e) => {
       if (e.clientX < 0 || this.stage!.width() < e.clientX
@@ -51,9 +53,11 @@ export class Note {
       this.currentPage.endLine();
       this.paint();
     });
+
+    this.paintBackground();
   }
 
-  public paint(): void {
+  private paint(): void {
     const children = this.currentLayer.getChildren();
     const latestLinePainted = children[children.length - 1] as Line;
 
@@ -84,12 +88,25 @@ export class Note {
 
     if (this.pageIndex > 0) {
       this.relativePage(-1).lines.forEach((line: Line) => {
-        const onionLine: Line = line.clone({color: 'grey'});
+        const onionLine: Line = line.clone({stroke: 'grey'});
         this.onionLayer.add(onionLine);
       });
     }
 
     this.onionLayer.batchDraw();
+  }
+
+  public paintBackground(): void {
+    console.log(this.stage!.width());
+    const backgroundRect = new Konva.Rect({
+      x: 0,
+      y: 0,
+      width: this.stage!.width(),
+      height: this.stage!.height(),
+      fill:penInstance.palette.backgroundColor
+    } as Konva.RectConfig);
+    this.backgroundLayer.add(backgroundRect);
+    this.backgroundLayer.batchDraw();
   }
 
   public relativePage(relativeIndex: number): Page {
@@ -101,10 +118,14 @@ export class Note {
   }
 
   public get currentLayer(): Konva.Layer {
-    return this.stage!.getLayers()[1] as Konva.Layer;
+    return this.stage!.getLayers()[2] as Konva.Layer;
   }
 
   public get onionLayer(): Konva.Layer {
+    return this.stage!.getLayers()[1] as Konva.Layer;
+  }
+
+  private get backgroundLayer(): Konva.Layer {
     return this.stage!.getLayers()[0] as Konva.Layer;
   }
 
@@ -157,7 +178,7 @@ export class Page {
   public addLine(pos: { x: number, y: number }): void {
     this.lines.push(
       new Line({
-        stroke: penInstance.color,
+        stroke: penInstance.palette.color,
         strokeWidth: penInstance.strokeWidth,
         globalCompositeOperation: penInstance.type,
         points: [pos.x, pos.y]
