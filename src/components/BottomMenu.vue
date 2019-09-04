@@ -1,9 +1,9 @@
 <template>
-  <div id="BottomMenu" v-show="!isHidden">
+  <div id="BottomMenu">
     <b-modal :active.sync="hasModalActive" :width="640" scroll="keep">
       <SettingsCard/>
     </b-modal>
-    <div class="bottom-menu-buttons" ref="menu">
+    <div :class="'bottom-menu-buttons' + (isHidden ? ' is-avoided' : '')" ref="menu">
       <b-button type="is-primary" size="is-medium" @click="hasModalActive = true">
         <b-icon pack="fas" icon="pen"></b-icon>
       </b-button>
@@ -91,5 +91,10 @@ export default class BottomMenu extends Vue {
   right: 0;
   left: 0;
   opacity: 0.9;
+}
+
+.is-avoided {
+  opacity: 0.2;
+  pointer-events: none;
 }
 </style>
