@@ -97,13 +97,12 @@ export class Note {
   }
 
   public paintBackground(): void {
-    console.log(this.stage!.width());
     const backgroundRect = new Konva.Rect({
       x: 0,
       y: 0,
       width: this.stage!.width(),
       height: this.stage!.height(),
-      fill:penInstance.palette.backgroundColor
+      fill: penInstance.palette.backgroundColor
     } as Konva.RectConfig);
     this.backgroundLayer.add(backgroundRect);
     this.backgroundLayer.batchDraw();
@@ -164,6 +163,28 @@ export class Note {
     this.currentPage.endLine();
     if (this.pageIndex > 0) this.pageIndex--;
     this.repaintAll();
+  }
+
+  public save(): void {
+    this.pageIndex = 0;
+    this.repaintAll();
+    let data = '';
+
+    this.onionLayer.hide();
+    for (let i = 0; i < this.pages.length; i++) {
+      this.pushPage(true);
+      const currentPageDataUrl = this.stage!.toDataURL();
+      const frameBase64 = currentPageDataUrl.split(';base64,')[1];
+      console.log(frameBase64);
+      data += `@${frameBase64}`;
+    }
+    this.onionLayer.show();
+
+    const form = new FormData();
+    form.append('fps', this.fps.toString());
+    form.append('text', data);
+
+    fetch('http://localhost:8000/paratsuku', {method: 'POST', body: form}).then(response => console.log(response));
   }
 }
 
