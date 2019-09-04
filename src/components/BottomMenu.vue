@@ -1,11 +1,12 @@
 <template>
   <div id="BottomMenu">
-    <b-modal :active.sync="hasModalActive" :width="640" scroll="keep">
+    <b-modal :active.sync="hasModalActive" scroll="keep" has-modal-card>
       <SettingsCard/>
     </b-modal>
     <div :class="'bottom-menu-buttons' + (isHidden ? ' is-avoided' : '')" ref="menu">
       <b-button type="is-primary" size="is-medium" @click="hasModalActive = true">
-        <b-icon pack="fas" icon="pen"></b-icon>
+        <b-icon pack="fas" icon="pen" v-if="pen.type === 'source-over'"></b-icon>
+        <b-icon pack="fas" icon="eraser" v-else></b-icon>
       </b-button>
       <b-button type="is-primary" size="is-medium" @click="note.currentPage.undo()"
                 :disabled="note.currentPage.lines.length === 0 || note.isPlaying">
