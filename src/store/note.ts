@@ -180,6 +180,8 @@ export class Page {
       new Line({
         stroke: penInstance.palette.color,
         strokeWidth: penInstance.strokeWidth,
+        lineCap: 'round',
+        lineJoin: 'round',
         globalCompositeOperation: penInstance.type,
         points: [pos.x, pos.y]
       } as Konva.LineConfig)
