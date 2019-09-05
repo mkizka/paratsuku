@@ -183,7 +183,7 @@ export class Note {
     form.append('text', data.join('@'));
 
     const response = await fetch(
-      'http://localhost:8000/para/encoding',
+      'http://localhost:8000/para/encode',
       {method: 'POST', body: form, mode: 'cors', credentials: 'include'},
     );
     const json: { base64: string } = await response.json();

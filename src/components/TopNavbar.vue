@@ -10,8 +10,7 @@
       <b-navbar-item tag="div">
         <b-button
           type="is-link"
-          tag="a"
-          :href="href"
+          @click="login"
           v-if="!isAuthenticated"
         >
           ログイン
@@ -34,8 +33,12 @@ export default class TopNavbar extends Vue {
   private isAuthenticated: boolean = false;
   private loginUrl: string = '';
 
-  mounted() {
-    fetch('http://localhost:8000/para/auth')
+  mounted(): void {
+    this.loginStateUpdate();
+  }
+
+  private loginStateUpdate(): void {
+    fetch('http://localhost:8000/para/auth', {mode: 'cors', credentials: 'include'})
       .then((response: Response) => response.json())
       .then((json: { isAuthenticated: boolean, loginUrl: string }) => {
         this.isAuthenticated = json.isAuthenticated;
@@ -43,10 +46,15 @@ export default class TopNavbar extends Vue {
       });
   }
 
-  get href(): string {
-    return `javascript:window.open('${this.loginUrl}',
-    'ログイン',
-    'width=400, height=300, menubar=no, toolbar=no, scrollbars=yes');`;
+  private login(): void {
+    const loginWindow = window.open(this.loginUrl, 'ログイン',
+      'width=400, height=300, menubar=no, toolbar=no, scrollbars=yes');
+    const loginDetectInterval = setInterval(() => {
+      if (loginWindow!.closed) {
+        clearInterval(loginDetectInterval);
+        this.loginStateUpdate();
+      }
+    }, 100);
   }
 }
 </script>
