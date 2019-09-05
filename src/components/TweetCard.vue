@@ -49,7 +49,7 @@ export default class TweetCard extends Vue {
     form.append('text', this.text);
     form.append('media', this.gif);
 
-    fetch('http://localhost:8000/para/tweet', {method: 'POST', body: form, mode: 'cors', credentials: 'include'})
+    fetch(noteInstance.endpointHost + '/para/tweet', {method: 'POST', body: form, mode: 'cors', credentials: 'include'})
       .then((response: Response) => response.json())
       .then((json: { isTweeted: false }) => {
         (this.$parent as any).close();

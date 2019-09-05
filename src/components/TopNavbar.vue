@@ -48,7 +48,7 @@ export default class TopNavbar extends Vue {
   }
 
   private loginStateUpdate(): void {
-    fetch('http://localhost:8000/para/auth', {mode: 'cors', credentials: 'include'})
+    fetch(noteInstance.endpointHost + '/para/auth', {mode: 'cors', credentials: 'include'})
       .then((response: Response) => response.json())
       .then((json: { isAuthenticated: boolean, loginUrl: string }) => {
         this.isAuthenticated = json.isAuthenticated;

@@ -7,6 +7,7 @@ export class Note {
   public pageIndex: number = 0;
   public fps: number = 12;
   public isPlaying: boolean = false;
+  public endpointHost: string = 'https://tsukuriga.net';
 
   private stage: Konva.Stage | undefined;
   private playInterval: number | undefined = undefined;
@@ -183,7 +184,7 @@ export class Note {
     form.append('text', data.join('@'));
 
     const response = await fetch(
-      'http://localhost:8000/para/encode',
+      noteInstance.endpointHost + '/para/encode',
       {method: 'POST', body: form, mode: 'cors', credentials: 'include'},
     );
     const json: { base64: string } = await response.json();
