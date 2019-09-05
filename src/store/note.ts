@@ -168,23 +168,25 @@ export class Note {
   public save(): void {
     this.pageIndex = 0;
     this.repaintAll();
-    let data = '';
+    let data = [];
 
     this.onionLayer.hide();
     for (let i = 0; i < this.pages.length; i++) {
       this.pushPage(true);
       const currentPageDataUrl = this.stage!.toDataURL();
       const frameBase64 = currentPageDataUrl.split(';base64,')[1];
-      console.log(frameBase64);
-      data += `@${frameBase64}`;
+      data.push(frameBase64);
     }
     this.onionLayer.show();
 
     const form = new FormData();
     form.append('fps', this.fps.toString());
-    form.append('text', data);
+    form.append('text', data.join('@'));
 
-    fetch('http://localhost:8000/paratsuku', {method: 'POST', body: form}).then(response => console.log(response));
+    fetch('http://localhost:8000/paratsuku', {method: 'POST', body: form})
+      .then((response: Response) => {
+        console.log(response.json());
+      });
   }
 }
 
