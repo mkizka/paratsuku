@@ -165,9 +165,8 @@ export class Note {
     this.repaintAll();
   }
 
-  public save(): void {
+  public async toDataUrl(): Promise<string> {
     this.pageIndex = 0;
-    this.repaintAll();
     let data = [];
 
     this.onionLayer.hide();
@@ -183,10 +182,12 @@ export class Note {
     form.append('fps', this.fps.toString());
     form.append('text', data.join('@'));
 
-    fetch('http://localhost:8000/paratsuku', {method: 'POST', body: form})
-      .then((response: Response) => {
-        console.log(response.json());
-      });
+    const response = await fetch(
+      'http://localhost:8000/para/encoding',
+      {method: 'POST', body: form, mode: 'cors', credentials: 'include'},
+    );
+    const json: { base64: string } = await response.json();
+    return json.base64;
   }
 }
 
