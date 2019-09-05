@@ -1,37 +1,47 @@
 <template>
-  <b-navbar type="is-primary" fixed-top>
-    <template slot="brand">
-      <b-navbar-item href="/">
-        <h1>Paratsuku</h1>
-      </b-navbar-item>
-    </template>
-
-    <template slot="end">
-      <b-navbar-item tag="div">
-        <b-button
-          type="is-link"
-          @click="login"
-          v-if="!isAuthenticated"
-        >
-          ログイン
-        </b-button>
-        <b-button type="is-info" @click="note.save()" v-else>
-          ツイート
-        </b-button>
-      </b-navbar-item>
-    </template>
-  </b-navbar>
+  <div id="TopNavbar">
+    <b-navbar type="is-primary" fixed-top>
+      <template slot="brand">
+        <b-navbar-item href="/">
+          <h1>Paratsuku</h1>
+        </b-navbar-item>
+      </template>
+      <template slot="end">
+        <b-navbar-item tag="div">
+          <b-button
+            icon-pack="fas" icon-left="signup" type="is-link"
+            @click="login" :disabled="note.isPlaying" v-if="!isAuthenticated"
+          >
+            ログイン
+          </b-button>
+          <b-button
+            icon-pack="fab" icon-left="twitter" type="is-info"
+            @click="hasTweeterActive = true" :disabled="note.isPlaying" v-else
+          >
+            ツイート
+          </b-button>
+        </b-navbar-item>
+      </template>
+    </b-navbar>
+    <b-modal :active.sync="hasTweeterActive" has-modal-card>
+      <TweetCard/>
+    </b-modal>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Note, noteInstance } from '@/store/note';
+import TweetCard from '@/components/TweetCard.vue';
 
-@Component
+@Component({
+  components: {TweetCard}
+})
 export default class TopNavbar extends Vue {
   private note: Note = noteInstance;
-  private isAuthenticated: boolean = false;
   private loginUrl: string = '';
+  private isAuthenticated: boolean = false;
+  private hasTweeterActive: boolean = false;
 
   mounted(): void {
     this.loginStateUpdate();
