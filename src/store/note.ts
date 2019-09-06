@@ -33,6 +33,7 @@ export class Note {
 
     this.stage.on('mousedown touchstart', (e: { evt: MouseEvent | TouchEvent }) => {
       if (e.evt instanceof TouchEvent && e.evt.touches.length > 1) return;
+      if (e.evt instanceof MouseEvent && e.evt.buttons !== 1) return;
 
       const pos = this.stage!.getPointerPosition();
       this.currentPage.addLine(pos);
