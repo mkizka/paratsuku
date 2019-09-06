@@ -1,14 +1,17 @@
 <template>
   <div id="BottomMenu">
-    <b-modal :active.sync="hasModalActive" has-modal-card>
+    <b-modal :active.sync="hasSettingsActive" has-modal-card>
       <SettingsCard/>
+    </b-modal>
+    <b-modal :active.sync="hasTweeterActive" has-modal-card>
+      <TweetCard/>
     </b-modal>
     <div :class="'bottom-menu-buttons' + (isHidden ? ' is-avoided' : '')" ref="menu">
       <b-button type="is-dark" size="is-small" style="width: 100%;margin-bottom: 2px">
         {{ note.pageStateDisplay }}
       </b-button>
       <div class="buttons are-medium has-addons">
-        <b-button type="is-dark" @click="hasModalActive = true">
+        <b-button type="is-dark" @click="hasSettingsActive = true">
           <b-icon pack="fas" icon="pen" v-if="pen.type === 'source-over'"></b-icon>
           <b-icon pack="fas" icon="eraser" v-else></b-icon>
         </b-button>
@@ -32,6 +35,10 @@
                   :disabled="note.isPlaying">
           <b-icon pack="fas" icon="chevron-right"></b-icon>
         </b-button>
+        <b-button type="is-dark" @click="hasTweeterActive = true"
+                  :disabled="note.isPlaying">
+          <b-icon pack="fab" icon="twitter"></b-icon>
+        </b-button>
       </div>
     </div>
   </div>
@@ -41,6 +48,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import SettingsCard from '@/components/SettingsCard.vue';
+import TweetCard from '@/components/TweetCard.vue';
 import { noteInstance, Note } from '@/store/note';
 import { penInstance, Pen } from '@/store/pen';
 
@@ -49,13 +57,14 @@ import Buefy from 'buefy';
 Vue.use(Buefy);
 
 @Component({
-  components: {SettingsCard}
+  components: {TweetCard, SettingsCard}
 })
 export default class BottomMenu extends Vue {
   private note: Note = noteInstance;
   private pen: Pen = penInstance;
   private isHidden: boolean = false;
-  private hasModalActive: boolean = false;
+  private hasSettingsActive: boolean = false;
+  private hasTweeterActive: boolean = false;
 
   mounted() {
     const menuHeight = (this.$refs.menu as Element).clientHeight;

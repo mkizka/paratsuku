@@ -9,12 +9,29 @@
           type="is-primary" size="is-medium" pack="fas"
           icon="spinner" custom-class="fa-spin" v-if="!gif"
         />
-        <img :src="gifUrl" width="80%" height="auto" alt="プレビュー" v-else/>
+        <img :src="gifUrl" width="200" height="auto" alt="プレビュー" v-else/>
       </b-field>
+      <template v-if="!isAuthenticated">
+        <label class="label">注意</label>
+        <b-field>
+          <p class="help">
+            ツイートにはツイッター連携済みの<a href="https://tsukuriga.net" target="_blank">ツクリガ</a>のアカウントが必要です。<br>
+            <b><span class="fas fa-sign-in-alt"></span>ログイン</b>ボタンを押すとツイッターアカウントを利用してツクリガへのログイン、<br>
+            または新規アカウントの作成を行い、ツイートのための権限を取得します。
+          </p>
+        </b-field>
+      </template>
       <b-field>
         <b-button
-          icon-pack="fab" icon-left="twitter" type="is-primary"
+          icon-pack="fas" icon-left="sign-in-alt" type="is-dark"
+          @click="login" v-if="!isAuthenticated"
+        >
+          ログイン
+        </b-button>
+        <b-button
+          icon-pack="fab" icon-left="twitter" type="is-dark"
           :disabled="!gif || isTweeting" :loading="isTweeting" @click="tweet"
+          v-else
         >
           ツイート
         </b-button>
@@ -30,31 +47,61 @@ import { noteInstance } from '@/store/note';
 
 @Component
 export default class TweetCard extends Vue {
+  private loginUrl: string = '';
+  private isAuthenticated: boolean = false;
   private gif: string = '';
   private text: string = '';
   private isTweeting: boolean = false;
 
+  async created(): Promise<void> {
+    await this.loginStateUpdate();
+  }
+
   async mounted(): Promise<void> {
     this.gif = await noteInstance.toDataUrl();
+  }
+
+  private async loginStateUpdate(): Promise<void> {
+    const response: Response = await fetch(noteInstance.endpointHost + '/para/auth', {
+      mode: 'cors',
+      credentials: 'include'
+    });
+    const json: { isAuthenticated: boolean, loginPath: string } = await response.json();
+    this.isAuthenticated = json.isAuthenticated;
+    this.loginUrl = noteInstance.endpointHost + json.loginPath;
+  }
+
+  private login(): void {
+    const loginWindow = window.open(this.loginUrl, 'ログイン',
+      'width=800, height=600, menubar=no, toolbar=no, scrollbars=yes');
+    const loginDetectInterval = setInterval(() => {
+      if (loginWindow!.closed) {
+        clearInterval(loginDetectInterval);
+        this.loginStateUpdate();
+      }
+    }, 100);
   }
 
   private get gifUrl(): string {
     return 'data:image/gif;base64,' + this.gif;
   }
 
-  private tweet(): void {
+  private async tweet(): Promise<void> {
     this.isTweeting = true;
 
     const form = new FormData();
     form.append('text', this.text);
     form.append('media', this.gif);
 
-    fetch(noteInstance.endpointHost + '/para/tweet', {method: 'POST', body: form, mode: 'cors', credentials: 'include'})
-      .then((response: Response) => response.json())
-      .then((json: { isTweeted: false }) => {
-        (this.$parent as any).close();
-        Notification.open(json.isTweeted ? 'ツイートしました' : 'ツイートに失敗しました');
-      });
+    const response: Response = await fetch(noteInstance.endpointHost + '/para/tweet', {
+      method: 'POST',
+      body: form,
+      mode: 'cors',
+      credentials: 'include'
+    });
+    const json: { isTweeted: false } = await response.json();
+    (this.$parent as any).close();
+    Notification.open(json.isTweeted ? 'ツイートしました' : 'ツイートに失敗しました');
   }
 }
 </script>
