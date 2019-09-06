@@ -2,7 +2,7 @@
   <div class="modal-card">
     <section class="modal-card-body">
       <label class="label">ツール選択</label>
-      <b-field>
+      <b-field grouped position="is-centered">
         <b-radio-button
           v-model="pen.type"
           :native-value="penType.normal"
@@ -20,10 +20,12 @@
           <span>消しゴム</span>
         </b-radio-button>
       </b-field>
-      <b-field label="線の太さ">
+      <label class="label">線の太さ {{ pen.strokeWidth }}</label>
+      <b-field grouped position="is-centered">
         <b-slider v-model="pen.strokeWidth" :min="1" :max="30"></b-slider>
       </b-field>
-      <b-field label="色テーマ">
+      <label class="label">色テーマ</label>
+      <b-field grouped position="is-centered">
         <b-select v-model="color">
           <option
             v-for="palette in colorSet"
@@ -32,6 +34,10 @@
             {{ palette.label }}
           </option>
         </b-select>
+      </b-field>
+      <label class="label">再生速度 {{ note.fps }}fps</label>
+      <b-field grouped position="is-centered">
+        <b-slider v-model="note.fps" :min="1" :max="30"></b-slider>
       </b-field>
     </section>
   </div>
