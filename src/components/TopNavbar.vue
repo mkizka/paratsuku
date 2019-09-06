@@ -33,7 +33,7 @@ import { DialogProgrammatic as Dialog } from 'buefy';
 export default class TopNavbar extends Vue {
   private about(): void {
     Dialog.alert({
-      title: 'Paratsuku -パラツク- とは',
+      title: 'パラツク -Paratsuku- とは',
       message: '<div class="content">' +
         '<p>パラパラ漫画を書いてすぐツイート出来るツール。</p>' +
         '<p>もともとはアプリとして作ったがiOS版が作れなかったりいろいろあってブラウザ版として作り直した。</p>' +
