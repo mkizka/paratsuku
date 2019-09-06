@@ -4,33 +4,35 @@
       <SettingsCard/>
     </b-modal>
     <div :class="'bottom-menu-buttons' + (isHidden ? ' is-avoided' : '')" ref="menu">
-      <b-button type="is-primary" size="is-medium" @click="hasModalActive = true">
-        <b-icon pack="fas" icon="pen" v-if="pen.type === 'source-over'"></b-icon>
-        <b-icon pack="fas" icon="eraser" v-else></b-icon>
-      </b-button>
-      <b-button type="is-primary" size="is-medium" @click="note.currentPage.undo()"
-                :disabled="note.currentPage.lines.length === 0 || note.isPlaying">
-        <b-icon pack="fas" icon="undo"></b-icon>
-      </b-button>
-      <b-button type="is-primary" size="is-medium" @click="note.currentPage.redo()"
-                :disabled="note.currentPage.redoableLines.length === 0 || note.isPlaying">
-        <b-icon pack="fas" icon="redo"></b-icon>
-      </b-button>
-      <b-button type="is-primary" size="is-medium" style="width: 90px">
+      <b-button type="is-dark" size="is-small" style="width: 100%;margin-bottom: 2px">
         {{ note.pageStateDisplay }}
       </b-button>
-      <b-button type="is-primary" size="is-medium" @click="note.backPage()"
-                :disabled="note.isPlaying">
-        <b-icon pack="fas" icon="chevron-left"></b-icon>
-      </b-button>
-      <b-button type="is-primary" size="is-medium" @click="note.play()">
-        <b-icon pack="fas" icon="stop" v-if="note.isPlaying"></b-icon>
-        <b-icon pack="fas" icon="play" v-else></b-icon>
-      </b-button>
-      <b-button type="is-primary" size="is-medium" @click="note.pushPage()"
-                :disabled="note.isPlaying">
-        <b-icon pack="fas" icon="chevron-right"></b-icon>
-      </b-button>
+      <div class="buttons are-medium has-addons">
+        <b-button type="is-dark" @click="hasModalActive = true">
+          <b-icon pack="fas" icon="pen" v-if="pen.type === 'source-over'"></b-icon>
+          <b-icon pack="fas" icon="eraser" v-else></b-icon>
+        </b-button>
+        <b-button type="is-dark" @click="note.currentPage.undo()"
+                  :disabled="note.currentPage.lines.length === 0 || note.isPlaying">
+          <b-icon pack="fas" icon="undo"></b-icon>
+        </b-button>
+        <b-button type="is-dark" @click="note.currentPage.redo()"
+                  :disabled="note.currentPage.redoableLines.length === 0 || note.isPlaying">
+          <b-icon pack="fas" icon="redo"></b-icon>
+        </b-button>
+        <b-button type="is-dark" @click="note.backPage()"
+                  :disabled="note.isPlaying">
+          <b-icon pack="fas" icon="chevron-left"></b-icon>
+        </b-button>
+        <b-button type="is-dark" @click="note.play()">
+          <b-icon pack="fas" icon="stop" v-if="note.isPlaying"></b-icon>
+          <b-icon pack="fas" icon="play" v-else></b-icon>
+        </b-button>
+        <b-button type="is-dark" @click="note.pushPage()"
+                  :disabled="note.isPlaying">
+          <b-icon pack="fas" icon="chevron-right"></b-icon>
+        </b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -91,11 +93,11 @@ export default class BottomMenu extends Vue {
   bottom: 20px;
   right: 0;
   left: 0;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .is-avoided {
-  opacity: 0.2;
+  opacity: 0.5;
   pointer-events: none;
 }
 </style>

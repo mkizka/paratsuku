@@ -1,6 +1,6 @@
 <template>
   <div id="TopNavbar">
-    <b-navbar type="is-primary" fixed-top>
+    <b-navbar type="is-dark" fixed-top>
       <template slot="brand">
         <b-navbar-item href="/">
           <h1>Paratsuku</h1>
@@ -9,7 +9,7 @@
       <template slot="end">
         <b-navbar-item tag="div">
           <b-button
-            icon-pack="fas" icon-left="signup" type="is-link"
+            icon-pack="fas" icon-left="sign-in-alt" type="is-link"
             @click="login" :disabled="note.isPlaying" v-if="!isAuthenticated"
           >
             ログイン
