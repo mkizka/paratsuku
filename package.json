@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "deploy": "yarn run build && firebase deploy"
   },
   "dependencies": {
     "buefy": "^0.8.2",
