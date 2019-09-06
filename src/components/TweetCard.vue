@@ -11,16 +11,19 @@
         />
         <img :src="gifUrl" width="200" height="auto" alt="プレビュー" v-else/>
       </b-field>
-      <template v-if="!isAuthenticated">
-        <label class="label">注意</label>
-        <b-field>
-          <p class="help">
-            ツイートにはツイッター連携済みの<a href="https://tsukuriga.net" target="_blank">ツクリガ</a>のアカウントが必要です。<br>
-            <b><span class="fas fa-sign-in-alt"></span>ログイン</b>ボタンを押すとツイッターアカウントを利用してツクリガへのログイン、<br>
-            または新規アカウントの作成を行い、ツイートのための権限を取得します。
-          </p>
-        </b-field>
-      </template>
+      <label class="label">注意</label>
+      <b-field>
+        <p class="help" v-if="!isAuthenticated">
+          ツイートにはツイッター連携済みの<a href="https://tsukuriga.net" target="_blank">ツクリガ</a>のアカウントが必要です。
+          <b><span class="fas fa-sign-in-alt"></span>ログイン</b>ボタンを押すとツイッターアカウントを利用してツクリガへのログイン、
+          または新規アカウントの作成を行い、ツイートのための権限を取得します。
+        </p>
+        <p class="help" v-else>
+          ツイートには<a href="https://tsukuriga.net" target="_blank">ツクリガ</a>で現在ログイン中のアカウントに連携しているツイッターアカウントを使用します。
+          異なるアカウントでツイートしたい場合は右上の<b><i class="fas fa-times"></i></b>ボタンを押して、 ツクリガからログアウトしてから再度<b><i
+          class="fab fa-twitter"></i></b>ボタンを押してください
+        </p>
+      </b-field>
       <b-field>
         <b-button
           icon-pack="fas" icon-left="sign-in-alt" type="is-dark"
