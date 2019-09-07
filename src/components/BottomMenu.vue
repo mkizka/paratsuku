@@ -6,8 +6,14 @@
     <b-modal :active.sync="hasTweeterActive" has-modal-card>
       <TweetCard/>
     </b-modal>
+    <b-modal :active.sync="hasTimelineActive" has-modal-card>
+      <TimeLineCard/>
+    </b-modal>
     <div :class="'bottom-menu-buttons' + (isHidden ? ' is-avoided' : '')" ref="menu">
-      <b-button type="is-dark" size="is-small" style="width: 100%;margin-bottom: 2px">
+      <b-button
+        type="is-dark" size="is-small" style="width: 100%;margin-bottom: 2px"
+        @click="hasTimelineActive = true"
+      >
         {{ note.pageStateDisplay }}
       </b-button>
       <div class="buttons are-medium has-addons">
@@ -49,6 +55,7 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import SettingsCard from '@/components/SettingsCard.vue';
 import TweetCard from '@/components/TweetCard.vue';
+import TimeLineCard from '@/components/TimeLineCard.vue';
 import { noteInstance, Note } from '@/store/note';
 import { penInstance, Pen } from '@/store/pen';
 
@@ -57,7 +64,7 @@ import Buefy from 'buefy';
 Vue.use(Buefy);
 
 @Component({
-  components: {TweetCard, SettingsCard}
+  components: {TimeLineCard, TweetCard, SettingsCard}
 })
 export default class BottomMenu extends Vue {
   private note: Note = noteInstance;
@@ -65,6 +72,7 @@ export default class BottomMenu extends Vue {
   private isHidden: boolean = false;
   private hasSettingsActive: boolean = false;
   private hasTweeterActive: boolean = false;
+  private hasTimelineActive: boolean = false;
 
   mounted() {
     const menuHeight = (this.$refs.menu as Element).clientHeight;

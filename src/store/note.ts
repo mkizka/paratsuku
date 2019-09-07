@@ -173,18 +173,51 @@ export class Note {
     this.repaintAll();
   }
 
-  public async toDataUrl(): Promise<string> {
-    this.pageIndex = 0;
+  public flipPage(toIndex: number): void {
+    if (0 <= toIndex && toIndex <= this.pages.length - 1) {
+      this.pageIndex = toIndex;
+      this.repaintAll();
+    }
+  }
+
+  public deletePage(): void {
+    if (this.pages.length >= 1) {
+      this.pages.splice(this.pageIndex, 1);
+      if (this.pageIndex > this.pages.length - 1) {
+        this.pageIndex = this.pages.length - 1;
+      }
+      this.repaintAll();
+    }
+  }
+
+  public insertPage(): void {
+    this.pages.splice(this.pageIndex, 0, new Page());
+  }
+
+  public copyPage(): void {
+    this.pages.splice(this.pageIndex, 0, this.currentPage.clone());
+  }
+
+  public toDataUrlArray(): string[] {
+    const currentPageIndex = this.pageIndex;
     let data = [];
+    this.flipPage(0);
 
     this.onionLayer.hide();
     for (let i = 0; i < this.pages.length; i++) {
-      this.pushPage(true);
       const currentPageDataUrl = this.stage!.toDataURL();
       const frameBase64 = currentPageDataUrl.split(';base64,')[1];
       data.push(frameBase64);
+      this.pushPage(true);
     }
     this.onionLayer.show();
+
+    this.flipPage(currentPageIndex);
+    return data;
+  }
+
+  public async toDataUrl(): Promise<string> {
+    let data = this.toDataUrlArray();
 
     const form = new FormData();
     form.append('fps', this.fps.toString());
@@ -202,6 +235,13 @@ export class Note {
 export class Page {
   public lines: Array<Line> = [];
   public redoableLines: Array<Line> = [];
+
+  public clone(): Page {
+    const clonedPage = new Page();
+    clonedPage.lines = this.lines.map(l => l.clone());
+    clonedPage.redoableLines = this.redoableLines.map(l => l.clone());
+    return clonedPage;
+  }
 
   public get latestLine() {
     return this.lines[this.lines.length - 1];
