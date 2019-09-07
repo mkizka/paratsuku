@@ -198,6 +198,12 @@ export class Note {
     this.pages.splice(this.pageIndex, 0, this.currentPage.clone());
   }
 
+  public exchangePage(relativeIndex: number): void {
+    [this.pages[this.pageIndex], this.pages[this.pageIndex + relativeIndex]] =
+      [this.pages[this.pageIndex + relativeIndex], this.pages[this.pageIndex]];
+    this.repaintAll();
+  }
+
   public toDataUrlArray(): string[] {
     const currentPageIndex = this.pageIndex;
     let data = [];

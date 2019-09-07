@@ -17,6 +17,12 @@
         <b-button @click="note.deletePage()" :disabled="note.pages.length <= 1">削除</b-button>
         <b-button @click="note.insertPage()">追加</b-button>
         <b-button @click="note.copyPage()">複製</b-button>
+        <b-button @click="note.exchangePage(-1)" :disabled="note.pageIndex === 0">
+          上と交換
+        </b-button>
+        <b-button @click="note.exchangePage(1)" :disabled="note.pageIndex === note.pages.length - 1">
+          下と交換
+        </b-button>
       </div>
     </section>
   </div>
