@@ -18,9 +18,9 @@ export class ColorPalette {
 }
 
 export const colorSet: ColorPalette[] = [
-  new ColorPalette('青っぽいの', '#167587', '#13A899'),
-  new ColorPalette('赤っぽいの', '#C3635A', '#F7C37B'),
-  new ColorPalette('黄っぽいの', '#A5965E', '#452A3A'),
+  new ColorPalette('緑っぽいの', '#358259', '#38b48b'),
+  new ColorPalette('青っぽいの', '#2d3c6d', '#37639f'),
+  new ColorPalette('灰っぽいの', '#3f525b', '#6c848d'),
 ];
 
 export class Pen {
