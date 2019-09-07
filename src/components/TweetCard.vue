@@ -2,7 +2,7 @@
   <div class="modal-card">
     <section class="modal-card-body">
       <b-field label="ツイート文">
-        <b-input maxlength="100" type="textarea" v-model="text"></b-input>
+        <b-input maxlength="100" type="textarea" v-model="text" ref="textarea"></b-input>
       </b-field>
       <b-field label="プレビュー">
         <b-icon
@@ -53,7 +53,7 @@ export default class TweetCard extends Vue {
   private loginUrl: string = '';
   private isAuthenticated: boolean = false;
   private gif: string = '';
-  private text: string = '';
+  private text: string = 'https://para.tsukuriga.net #tsukuriga';
   private isTweeting: boolean = false;
 
   async created(): Promise<void> {
@@ -62,6 +62,9 @@ export default class TweetCard extends Vue {
 
   async mounted(): Promise<void> {
     this.gif = await noteInstance.toDataUrl();
+    if (this.isAuthenticated) {
+      (this.$refs.textarea as HTMLInputElement).focus();
+    }
   }
 
   private async loginStateUpdate(): Promise<void> {
