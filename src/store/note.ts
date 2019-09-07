@@ -257,6 +257,12 @@ export class Page {
 
 export class Line extends Konva.Line {
   public isFinished = false;
+
+  clone(obj?: any): Line {
+    const clonedObj: Line = super.clone(obj);
+    clonedObj.isFinished = this.isFinished;
+    return clonedObj;
+  }
 }
 
 export const noteInstance = Vue.observable(new Note());

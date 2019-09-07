@@ -65,6 +65,7 @@ export default class SettingsCard extends Vue {
   private colorOnChange() {
     this.pen.setColor(this.color);
     this.note.paintBackground();
+    this.note.repaintAll();
   }
 }
 </script>
