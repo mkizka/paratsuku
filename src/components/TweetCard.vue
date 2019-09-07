@@ -102,9 +102,13 @@ export default class TweetCard extends Vue {
       mode: 'cors',
       credentials: 'include'
     });
-    const json: { isTweeted: false } = await response.json();
+    const json: { isTweeted: false, message: string } = await response.json();
     (this.$parent as any).close();
-    Notification.open(json.isTweeted ? 'ツイートしました' : 'ツイートに失敗しました');
+    Notification.open({
+      type: json.isTweeted ? 'is-success' : 'is-danger',
+      message: json.message,
+      duration: 5
+    });
   }
 }
 </script>
