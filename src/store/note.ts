@@ -12,11 +12,11 @@ export class Note {
   private stage: Konva.Stage | undefined;
   private playInterval: number | undefined = undefined;
 
-  initStage(stageConfig: Konva.ContainerConfig) {
+  initStage(container: string) {
     this.stage = new Konva.Stage({
-      container: stageConfig.container,
-      width: stageConfig.width,
-      height: stageConfig.height,
+      container: container,
+      width: window.innerWidth,
+      height: window.innerHeight,
     });
 
     const layer = new Konva.Layer();
@@ -29,6 +29,12 @@ export class Note {
     window.addEventListener('mousemove', (e) => {
       if (e.clientX < 0 || this.stage!.width() < e.clientX
         || e.clientY < 0 || this.stage!.height() < e.clientY) this.currentPage.endLine();
+    });
+
+    window.addEventListener('resize', (e) => {
+      this.stage!.width(window.innerWidth);
+      this.stage!.height(window.innerHeight);
+      this.paintBackground();
     });
 
     this.stage.on('mousedown touchstart', (e: { evt: MouseEvent | TouchEvent }) => {

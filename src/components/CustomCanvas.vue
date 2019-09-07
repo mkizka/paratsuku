@@ -13,11 +13,7 @@ export default class CustomCanvas extends Vue {
   private pen: Pen = penInstance;
 
   mounted() {
-    this.note.initStage({
-      container: 'CustomCanvas',
-      width: window.innerWidth,
-      height: window.innerHeight
-    });
+    this.note.initStage('#CustomCanvas');
   }
 }
 </script>
