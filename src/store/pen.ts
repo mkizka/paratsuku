@@ -10,7 +10,7 @@ export class ColorPalette {
   public color: string;
   public backgroundColor: string;
 
-  constructor(label:string, color: string, backgroundColor: string) {
+  constructor(label: string, color: string, backgroundColor: string) {
     this.label = label;
     this.color = color;
     this.backgroundColor = backgroundColor;
@@ -25,8 +25,13 @@ export const colorSet: ColorPalette[] = [
 
 export class Pen {
   public palette: ColorPalette = colorSet[0];
-  public strokeWidth: number = 5;
+  public strokeWidth: number = 3;
+  public eraserWidth: number = 7;
   public type: PenType = PenType.normal;
+
+  public get width(): number {
+    return this.type == PenType.normal ? this.strokeWidth : this.eraserWidth;
+  }
 
   public setColor(value: string) {
     colorSet.forEach((palette: ColorPalette) => {

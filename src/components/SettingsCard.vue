@@ -20,9 +20,13 @@
           <span>消しゴム</span>
         </b-radio-button>
       </b-field>
-      <label class="label">線の太さ {{ pen.strokeWidth }}</label>
+      <label class="label">ペンの太さ {{ pen.strokeWidth }}</label>
       <b-field grouped position="is-centered">
         <b-slider v-model="pen.strokeWidth" :min="1" :max="30"></b-slider>
+      </b-field>
+      <label class="label">消しゴムの太さ {{ pen.eraserWidth }}</label>
+      <b-field grouped position="is-centered">
+        <b-slider v-model="pen.eraserWidth" :min="1" :max="30"></b-slider>
       </b-field>
       <label class="label">色テーマ</label>
       <b-field grouped position="is-centered">

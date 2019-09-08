@@ -257,7 +257,7 @@ export class Page {
     this.lines.push(
       new Line({
         stroke: penInstance.palette.color,
-        strokeWidth: penInstance.strokeWidth,
+        strokeWidth: penInstance.width,
         lineCap: 'round',
         lineJoin: 'round',
         globalCompositeOperation: penInstance.type,
