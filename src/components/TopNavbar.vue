@@ -35,10 +35,12 @@ export default class TopNavbar extends Vue {
     Dialog.alert({
       title: 'パラツク -Paratsuku- とは',
       message: '<div class="content">' +
-        '<p>パラパラ漫画を書いてすぐツイート出来るツール。</p>' +
-        '<p>もともとはアプリとして作ったがiOS版が作れなかったりいろいろあってブラウザ版として作り直した。</p>' +
+        '<p>パラパラ漫画を書いてすぐツイート出来るツール。' +
+        '<a href="https://www.nintendo.co.jp/3ds/dl/jkzj/" target="_blank">うごくメモ帳</a>と' +
+        '<a href="https://www.kannagi.net/TEGAKI/" target="_blank">TEGAKI Draw And Tweet</a>にところどころ影響を受けている。</p>' +
         '<p>ツイート部分はツクリガの認証機能を使っている(手抜き)ため、' +
         '未登録の人はログインすると同時にツクリガアカウントも作成されるので注意してください。</p>' +
+        '<p>利用にあたっての注意事項は<a href="https://tsukuriga.net/pages/guide#paratsuku" target="_blank">ユーザーガイド</a>を参照</p>' +
         '</div>',
       type: 'is-dark'
     });

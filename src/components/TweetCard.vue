@@ -16,12 +16,13 @@
         <p class="help" v-if="!isAuthenticated">
           ツイートにはツイッター連携済みの<a href="https://tsukuriga.net" target="_blank">ツクリガ</a>のアカウントが必要です。
           <b><span class="fas fa-sign-in-alt"></span>ログイン</b>ボタンを押すとツイッターアカウントを利用してツクリガへのログイン、
-          または新規アカウントの作成を行い、ツイートのための権限を取得します。
+          または新規アカウントの作成を行い、ツイートのための権限を取得します。<br>
+          詳しくは<a href="https://tsukuriga.net/pages/guide#paratsuku" target="_blank">ユーザーガイド</a>へ
         </p>
         <p class="help" v-else>
-          ツイートには<a href="https://tsukuriga.net" target="_blank">ツクリガ</a>で現在ログイン中のアカウントに連携しているツイッターアカウントを使用します。
-          異なるアカウントでツイートしたい場合は右上の<b><i class="fas fa-times"></i></b>ボタンを押して、 ツクリガからログアウトしてから再度<b><i
-          class="fab fa-twitter"></i></b>ボタンを押してください
+          ツイートには<a href="https://tsukuriga.net" target="_blank">ツクリガ</a>で現在ログイン中のアカウントに連携しているツイッターアカウントを使用します。<br>
+          すでにツクリガでツイッター連携をしていてもアクセス情報が古く書き込み権限が使用できない場合があります。エラーが出る場合はツクリガからログアウトし、再度ツイッター連携でログインを行ってください。<br>
+          詳しくは<a href="https://tsukuriga.net/pages/guide#paratsuku" target="_blank">ユーザーガイド</a>へ
         </p>
       </b-field>
       <b-field>
