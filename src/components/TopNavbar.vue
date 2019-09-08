@@ -1,8 +1,8 @@
 <template>
   <b-navbar type="is-dark" fixed-top>
     <template slot="brand">
-      <b-navbar-item href="/">
-        <h1>Paratsuku</h1>
+      <b-navbar-item>
+        <h1>{{ title }}</h1>
       </b-navbar-item>
     </template>
     <template slot="start">
@@ -26,11 +26,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import { DialogProgrammatic as Dialog } from 'buefy';
 
 @Component
 export default class TopNavbar extends Vue {
+  @Prop()
+  title!: string;
+
   private about(): void {
     Dialog.alert({
       title: 'パラツク -Paratsuku- とは',
@@ -40,7 +43,7 @@ export default class TopNavbar extends Vue {
         '<a href="https://www.kannagi.net/TEGAKI/" target="_blank">TEGAKI Draw And Tweet</a>にところどころ影響を受けている。</p>' +
         '<p>ツイート部分はツクリガの認証機能を使っている(手抜き)ため、' +
         '未登録の人はログインすると同時にツクリガアカウントも作成されるので注意してください。</p>' +
-        '<p>利用にあたっての注意事項は<a href="https://tsukuriga.net/pages/guide#paratsuku" target="_blank">ユーザーガイド</a>を参照</p>' +
+        '<p>利用にあたっての注意事項は<a href="https://tsukuriga.net/pages/guide#paratsuku" target="_blank">ユーザーガイド</a>を参照のこと。</p>' +
         '</div>',
       type: 'is-dark'
     });

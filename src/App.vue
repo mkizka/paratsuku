@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <TopNavbar/>
+    <TopNavbar :title="title"/>
     <CustomCanvas/>
     <BottomMenu/>
   </div>
@@ -12,6 +12,7 @@ import CustomCanvas from '@/components/CustomCanvas.vue';
 import BottomMenu from '@/components/BottomMenu.vue';
 import TopNavbar from '@/components/TopNavbar.vue';
 
+import { DialogProgrammatic as Dialog } from 'buefy';
 import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import 'buefy/dist/buefy.css';
 
@@ -19,6 +20,24 @@ import 'buefy/dist/buefy.css';
   components: {TopNavbar, BottomMenu, CustomCanvas}
 })
 export default class App extends Vue {
+  private version = require('../package.json').version;
+
+  get title(): string {
+    return 'Paratsuku v' + this.version;
+  }
+
+  async mounted() {
+    const response: Response = await fetch('https://raw.githubusercontent.com/Compeito/paratsuku/master/package.json');
+    const latest: { version: string } = await response.json();
+    if (this.version != latest.version) {
+      Dialog.confirm({
+        message: `アップデート(v${this.version} -> v${latest.version})があります。更新しますか？<br>` +
+          '<span class="help">キャッシュのクリア、スーパーリロード(Shift + F5など)でも同様に更新できます</span>',
+        type: 'is-dark',
+        onConfirm: () => document.location.reload(true)
+      });
+    }
+  }
 }
 </script>
 
