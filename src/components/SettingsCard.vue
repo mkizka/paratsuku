@@ -39,6 +39,10 @@
       <b-field grouped position="is-centered">
         <b-slider v-model="note.fps" :min="1" :max="30"></b-slider>
       </b-field>
+      <label class="label">scale {{ note.scale }}x</label>
+      <b-field grouped position="is-centered">
+        <b-slider v-model="note.scale" :min="1.0" :max="30.0"></b-slider>
+      </b-field>
     </section>
   </div>
 </template>

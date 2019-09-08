@@ -12,6 +12,11 @@ export class Note {
   private stage: Konva.Stage | undefined;
   private playInterval: number | undefined = undefined;
 
+  private scaledPos(): { x: number, y: number } {
+    const pos = this.stage!.getPointerPosition();
+    return {x: pos.x / this.scale, y: pos.y / this.scale};
+  }
+
   initStage(container: string) {
     this.stage = new Konva.Stage({
       container: container,
@@ -32,8 +37,8 @@ export class Note {
     });
 
     window.addEventListener('resize', (e) => {
-      this.stage!.width(window.innerWidth);
-      this.stage!.height(window.innerHeight);
+      this.stage!.width(window.innerWidth * this.scale);
+      this.stage!.height(window.innerHeight * this.scale);
       this.paintBackground();
     });
 
@@ -41,7 +46,7 @@ export class Note {
       if (e.evt instanceof TouchEvent && e.evt.touches.length > 1) return;
       if (e.evt instanceof MouseEvent && e.evt.buttons !== 1) return;
 
-      const pos = this.stage!.getPointerPosition();
+      const pos = this.scaledPos();
       this.currentPage.addLine(pos);
       this.paint();
     });
@@ -50,7 +55,7 @@ export class Note {
       if (e.evt instanceof MouseEvent && e.evt.buttons !== 1) return;
       e.evt.preventDefault();
 
-      const pos = this.stage!.getPointerPosition();
+      const pos = this.scaledPos();
       this.currentPage.updateLine(pos);
       this.paint();
     });
@@ -62,7 +67,32 @@ export class Note {
       this.paint();
     });
 
+    window.addEventListener('mousewheel', (e: Event) => {
+      e.preventDefault();
+      // .onでない場面でポインター位置がとれないため
+      this.stage!.setPointersPositions(e);
+      if ((e as WheelEvent).deltaY > 0) {
+        this.scale += 0.1;
+      } else {
+        this.scale -= 0.1;
+      }
+    }, {passive: false});
+
     this.paintBackground();
+  }
+
+  public get scale(): number {
+    return this.stage!.scaleX();
+  }
+
+  public set scale(rate: number) {
+    this.stage!.scale({x: rate, y: rate});
+    this.stage!.width(window.innerWidth * this.scale);
+    this.stage!.height(window.innerHeight * this.scale);
+    const pos = this.scaledPos();
+    window.scroll(pos.x, pos.y);
+    console.log(this.scaledPos() as ScrollToOptions);
+    this.repaintAll();
   }
 
   private paint(): void {
