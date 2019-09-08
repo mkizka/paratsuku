@@ -12,7 +12,7 @@
     <div :class="'bottom-menu-buttons' + (isHidden ? ' is-avoided' : '')" ref="menu">
       <b-button
         type="is-dark" size="is-small" style="width: 100%;margin-bottom: 2px"
-        @click="hasTimelineActive = true"
+        @click="hasTimelineLoading = true" :loading="hasTimelineLoading"
       >
         {{ note.pageStateDisplay }}
       </b-button>
@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
 import SettingsCard from '@/components/SettingsCard.vue';
 import TweetCard from '@/components/TweetCard.vue';
@@ -73,6 +73,24 @@ export default class BottomMenu extends Vue {
   private hasSettingsActive: boolean = false;
   private hasTweeterActive: boolean = false;
   private hasTimelineActive: boolean = false;
+  private hasTimelineLoading: boolean = false;
+
+  @Watch('hasTimelineLoading')
+  private hasTimelineLoadingWatcher() {
+    // ローディングを先に発火することでタイムラインプレビュー生成前にローディングを表示させる
+    if (this.hasTimelineLoading) {
+      setTimeout(() => {
+        this.hasTimelineActive = true;
+      }, 10);
+    }
+  }
+
+  @Watch('hasTimelineActive')
+  private hasTimelineActiveWatcher() {
+    if (!this.hasTimelineActive) {
+      this.hasTimelineLoading = false;
+    }
+  }
 
   mounted() {
     const menuHeight = (this.$refs.menu as Element).clientHeight;

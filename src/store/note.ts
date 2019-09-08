@@ -201,7 +201,19 @@ export class Note {
   public exchangePage(relativeIndex: number): void {
     [this.pages[this.pageIndex], this.pages[this.pageIndex + relativeIndex]] =
       [this.pages[this.pageIndex + relativeIndex], this.pages[this.pageIndex]];
+    this.pageIndex += relativeIndex;
     this.repaintAll();
+  }
+
+  public toDataUrl(pageIndex: number): string {
+    this.pageIndex = pageIndex;
+    this.repaintAll();
+
+    this.onionLayer.hide();
+    const dataUrl: string = this.stage!.toDataURL();
+    this.onionLayer.show();
+
+    return dataUrl;
   }
 
   public toDataUrlArray(): string[] {
@@ -212,8 +224,7 @@ export class Note {
     this.onionLayer.hide();
     for (let i = 0; i < this.pages.length; i++) {
       const currentPageDataUrl = this.stage!.toDataURL();
-      const frameBase64 = currentPageDataUrl.split(';base64,')[1];
-      data.push(frameBase64);
+      data.push(currentPageDataUrl);
       this.pushPage(true);
     }
     this.onionLayer.show();
@@ -222,8 +233,10 @@ export class Note {
     return data;
   }
 
-  public async toDataUrl(): Promise<string> {
-    let data = this.toDataUrlArray();
+  public async toDataUrlGif(): Promise<string> {
+    let data = this.toDataUrlArray().map((dataUrl: string) => {
+      return dataUrl.split(';base64,')[1];
+    });
 
     const form = new FormData();
     form.append('fps', this.fps.toString());

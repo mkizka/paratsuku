@@ -3,24 +3,21 @@
     <section class="modal-card-body">
       <div class="list is-hoverable">
         <template v-for="(image, i) in images">
-          <div
-            class="list-item" @click="note.flipPage(parseInt(i))"
-            :class="{ 'is-selected': note.pageIndex === parseInt(i)}"
-          >
-            <img class="list-item-image" :src="'data:image/png;base64,' + image" :alt="`${i + 1}ページ目`">
+          <div class="list-item" @click="flipPage(parseInt(i))" :class="{ 'is-selected': nowIndex === parseInt(i)}">
+            <img class="list-item-image" :src="image" :alt="`${i + 1}ページ目`">
           </div>
         </template>
       </div>
     </section>
     <section class="modal-card-foot">
       <div class="buttons">
-        <b-button @click="note.deletePage()" :disabled="note.pages.length <= 1">削除</b-button>
-        <b-button @click="note.insertPage()">追加</b-button>
-        <b-button @click="note.copyPage()">複製</b-button>
-        <b-button @click="note.exchangePage(-1)" :disabled="note.pageIndex === 0">
+        <b-button @click="deletePage" :disabled="note.pages.length <= 1">削除</b-button>
+        <b-button @click="insertPage">追加</b-button>
+        <b-button @click="copyPage">複製</b-button>
+        <b-button @click="exchangePage(-1)" :disabled="note.pageIndex === 0">
           上と交換
         </b-button>
-        <b-button @click="note.exchangePage(1)" :disabled="note.pageIndex === note.pages.length - 1">
+        <b-button @click="exchangePage(1)" :disabled="note.pageIndex === note.pages.length - 1">
           下と交換
         </b-button>
       </div>
@@ -35,10 +32,40 @@ import { Note, noteInstance } from '@/store/note';
 @Component
 export default class TimeLineCard extends Vue {
   private note: Note = noteInstance;
+  private images: string[] = [];
+  private nowIndex: number = noteInstance.pageIndex;
 
-  @Watch('note.pages')
-  get images() {
-    return this.note.toDataUrlArray();
+  mounted() {
+    this.images = this.note.toDataUrlArray();
+  }
+
+  private flipPage(i: number) {
+    noteInstance.flipPage(i);
+    this.nowIndex = noteInstance.pageIndex;
+  }
+
+  private deletePage() {
+    this.images.splice(noteInstance.pageIndex, 1);
+    noteInstance.deletePage();
+  }
+
+  private insertPage() {
+    noteInstance.insertPage();
+    this.images.splice(noteInstance.pageIndex, 0, noteInstance.toDataUrl(this.nowIndex));
+    this.nowIndex++;
+  }
+
+  private copyPage() {
+    noteInstance.copyPage();
+    this.images.splice(noteInstance.pageIndex, 0, noteInstance.toDataUrl(this.nowIndex + 1));
+    this.nowIndex++;
+  }
+
+  private exchangePage(i: number) {
+    noteInstance.exchangePage(i);
+    [this.images[this.nowIndex], this.images[this.nowIndex + i]] =
+      [this.images[this.nowIndex + i], this.images[this.nowIndex]];
+    this.nowIndex += i;
   }
 }
 </script>
