@@ -1,11 +1,14 @@
 import Vue from 'vue';
 import Konva from 'konva';
+import Color from 'color';
+
 import { penInstance } from './pen';
 
 export class Note {
   public pages: Array<Page> = [new Page()];
   public pageIndex: number = 0;
   public fps: number = 12;
+  public onionRange: 0 | 1 | 2 | 3 = 2;
   public isPlaying: boolean = false;
   public endpointHost: string = 'https://tsukuriga.net';
 
@@ -92,14 +95,28 @@ export class Note {
   }
 
   private paintOnion(): void {
+    if (this.isPlaying) return;
     this.onionLayer.removeChildren();
 
-    if (this.pageIndex > 0) {
-      this.relativePage(-1).lines.forEach((line: Line) => {
-        const onionLine: Line = line.clone({stroke: 'grey'});
+    // [0, 1, ... onionRange-1]
+    const onionIndexList: number[] = [...Array(this.onionRange).keys()];
+    const onionMixRateList: number[] = [0.5, 0.7, 0.8];
+
+    // より前のページから描画していくため反転
+    onionIndexList.reverse().forEach((onionIndex: number) => {
+      const onionRelativeIndex = -(onionIndex + 1);
+      if (this.pageIndex + onionRelativeIndex < 0) return;
+
+      this.relativePage(onionRelativeIndex).lines.forEach((line: Line) => {
+        const strokeColor = new Color(line.stroke());
+        const onionLine: Line = line.clone({
+          stroke: strokeColor.mix(
+            new Color(penInstance.palette.backgroundColor), onionMixRateList[onionIndex]
+          ).string()
+        });
         this.onionLayer.add(onionLine);
       });
-    }
+    });
 
     this.onionLayer.batchDraw();
   }
