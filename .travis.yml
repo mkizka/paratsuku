@@ -11,3 +11,4 @@ deploy:
   project: "para-tsuku"
   on:
     branch: master
+    tags: true
