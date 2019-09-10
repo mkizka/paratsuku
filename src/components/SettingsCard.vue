@@ -43,6 +43,10 @@
       <b-field grouped position="is-centered">
         <b-slider v-model="note.fps" :min="1" :max="30"></b-slider>
       </b-field>
+      <label class="label">透過枚数 {{ note.onionRange }}ページ</label>
+      <b-field grouped position="is-centered">
+        <b-slider v-model="note.onionRange" :min="0" :max="3" tooltip ticks></b-slider>
+      </b-field>
     </section>
   </div>
 </template>
@@ -69,6 +73,11 @@ export default class SettingsCard extends Vue {
   private colorOnChange() {
     this.pen.setColor(this.color);
     this.note.paintBackground();
+    this.note.repaintAll();
+  }
+
+  @Watch('note.onionRange')
+  private onionRangeOnChange() {
     this.note.repaintAll();
   }
 }
