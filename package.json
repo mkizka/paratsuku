@@ -1,6 +1,6 @@
 {
   "name": "paratsuku",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "パラパラ漫画を書いて、手軽にツイートできるツール",
   "private": true,
   "scripts": {
