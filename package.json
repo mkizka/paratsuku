@@ -1,6 +1,7 @@
 {
   "name": "paratsuku",
   "version": "0.1.0",
+  "description": "パラパラ漫画を書いて、手軽にツイートできるツール",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
