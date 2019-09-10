@@ -69,13 +69,13 @@ export default class TweetCard extends Vue {
   }
 
   private async loginStateUpdate(): Promise<void> {
-    const response: Response = await fetch(noteInstance.endpointHost + '/para/auth', {
+    const response: Response = await fetch(noteInstance.apiUrl + '/auth', {
       mode: 'cors',
       credentials: 'include'
     });
     const json: { isAuthenticated: boolean, loginPath: string } = await response.json();
     this.isAuthenticated = json.isAuthenticated;
-    this.loginUrl = noteInstance.endpointHost + json.loginPath;
+    this.loginUrl = noteInstance.apiUrl + json.loginPath;
   }
 
   private login(): void {
@@ -100,7 +100,7 @@ export default class TweetCard extends Vue {
     form.append('text', this.text);
     form.append('media', this.gif);
 
-    const response: Response = await fetch(noteInstance.endpointHost + '/para/tweet', {
+    const response: Response = await fetch(noteInstance.apiUrl + '/tweet', {
       method: 'POST',
       body: form,
       mode: 'cors',

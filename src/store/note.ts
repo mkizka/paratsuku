@@ -10,7 +10,7 @@ export class Note {
   public fps: number = 12;
   public onionRange: 0 | 1 | 2 | 3 = 2;
   public isPlaying: boolean = false;
-  public endpointHost: string = 'https://tsukuriga.net';
+  public apiUrl: string = process.env.VUE_APP_API_URL || 'https://tsukuriga.net/para';
 
   private stage: Konva.Stage | undefined;
   private playInterval: number | undefined = undefined;
@@ -260,7 +260,7 @@ export class Note {
     form.append('text', data.join('@'));
 
     const response = await fetch(
-      noteInstance.endpointHost + '/para/encode',
+      noteInstance.apiUrl + '/encode',
       {method: 'POST', body: form, mode: 'cors', credentials: 'include'},
     );
     const json: { base64: string } = await response.json();
