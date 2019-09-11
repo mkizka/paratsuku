@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <TopNavbar :title="title"/>
-    <CustomCanvas/>
+    <CustomCanvas ref="canvas"/>
     <BottomMenu/>
   </div>
 </template>

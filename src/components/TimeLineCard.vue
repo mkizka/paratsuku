@@ -34,9 +34,11 @@ export default class TimeLineCard extends Vue {
   private note: Note = noteInstance;
   private images: string[] = [];
   private nowIndex: number = noteInstance.pageIndex;
+  private canvas: any | undefined;
 
   mounted() {
-    this.images = this.note.toDataUrlArray();
+    this.canvas = this.$root.$children[0].$refs.canvas;
+    this.images = this.canvas!.toDataUrlArray();
   }
 
   private flipPage(i: number) {
@@ -51,13 +53,13 @@ export default class TimeLineCard extends Vue {
 
   private insertPage() {
     noteInstance.insertPage();
-    this.images.splice(noteInstance.pageIndex, 0, noteInstance.toDataUrl(this.nowIndex));
+    this.images.splice(noteInstance.pageIndex, 0, this.canvas.toDataUrl(this.nowIndex - 1));
     this.nowIndex++;
   }
 
   private copyPage() {
     noteInstance.copyPage();
-    this.images.splice(noteInstance.pageIndex, 0, noteInstance.toDataUrl(this.nowIndex + 1));
+    this.images.splice(noteInstance.pageIndex, 0, this.canvas.toDataUrl(this.nowIndex + 1));
     this.nowIndex++;
   }
 

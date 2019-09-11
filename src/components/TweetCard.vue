@@ -62,7 +62,7 @@ export default class TweetCard extends Vue {
   }
 
   async mounted(): Promise<void> {
-    this.gif = await noteInstance.toDataUrlGif();
+    this.gif = await (this.$root.$children[0].$refs.canvas as any).toDataUrlGif();
     if (this.isAuthenticated) {
       (this.$refs.textarea as HTMLInputElement).focus();
     }

@@ -72,13 +72,12 @@ export default class SettingsCard extends Vue {
   @Watch('color')
   private colorOnChange() {
     this.pen.setColor(this.color);
-    this.note.paintBackground();
-    this.note.repaintAll();
+    this.note.shouldRepaint = true;
   }
 
   @Watch('note.onionRange')
   private onionRangeOnChange() {
-    this.note.repaintAll();
+    this.note.shouldRepaint = true;
   }
 }
 </script>
