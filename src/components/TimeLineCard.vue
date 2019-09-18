@@ -3,7 +3,10 @@
     <section class="modal-card-body">
       <div class="list is-hoverable">
         <template v-for="(image, i) in images">
-          <div class="list-item" @click="flipPage(parseInt(i))" :class="{ 'is-selected': nowIndex === parseInt(i)}">
+          <div
+            class="list-item" :data-page-index="i"
+            @click="note.flipPage(parseInt(i))" :class="{ 'is-selected': nowIndex === parseInt(i)}"
+          >
             <img class="list-item-image" :src="image" :alt="`${i + 1}ページ目`">
           </div>
         </template>
@@ -39,33 +42,37 @@ export default class TimeLineCard extends Vue {
     this.images = this.note.toDataUrlArray();
   }
 
-  private flipPage(i: number) {
-    noteInstance.flipPage(i);
+  @Watch('note.pageIndex', {immediate: true})
+  private update() {
     this.nowIndex = noteInstance.pageIndex;
+    setTimeout(() => {
+      document.querySelector(`div[data-page-index="${this.nowIndex}"]`)!.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'nearest',
+      });
+    }, 100);
   }
 
   private deletePage() {
-    this.images.splice(noteInstance.pageIndex, 1);
     noteInstance.deletePage();
+    this.images.splice(this.nowIndex, 1);
   }
 
   private insertPage() {
     noteInstance.insertPage();
-    this.images.splice(noteInstance.pageIndex, 0, noteInstance.toDataUrl(this.nowIndex));
-    this.nowIndex++;
+    this.images.splice(this.nowIndex, 0, noteInstance.toDataUrl(this.nowIndex));
   }
 
   private copyPage() {
     noteInstance.copyPage();
-    this.images.splice(noteInstance.pageIndex, 0, noteInstance.toDataUrl(this.nowIndex + 1));
-    this.nowIndex++;
+    this.images.splice(this.nowIndex, 0, noteInstance.toDataUrl(this.nowIndex + 1));
   }
 
   private exchangePage(i: number) {
     noteInstance.exchangePage(i);
     [this.images[this.nowIndex], this.images[this.nowIndex + i]] =
       [this.images[this.nowIndex + i], this.images[this.nowIndex]];
-    this.nowIndex += i;
   }
 }
 </script>
