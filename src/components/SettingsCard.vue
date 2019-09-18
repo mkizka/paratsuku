@@ -20,32 +20,37 @@
           <span>消しゴム</span>
         </b-radio-button>
       </b-field>
-      <label class="label">ペンの太さ {{ pen.strokeWidth }}</label>
       <b-field grouped position="is-centered">
-        <b-slider v-model="pen.strokeWidth" :min="1" :max="30"></b-slider>
+        <b-field :label="'ペンの太さ ' + ('00' + pen.strokeWidth).slice(-2)" expanded>
+          <b-slider v-model="pen.strokeWidth" :min="1" :max="30"></b-slider>
+        </b-field>
+        <b-field :label="'消しゴムの太さ ' + ('00' + pen.eraserWidth).slice(-2)" expanded>
+          <b-slider v-model="pen.eraserWidth" :min="1" :max="30"></b-slider>
+        </b-field>
       </b-field>
-      <label class="label">消しゴムの太さ {{ pen.eraserWidth }}</label>
       <b-field grouped position="is-centered">
-        <b-slider v-model="pen.eraserWidth" :min="1" :max="30"></b-slider>
+        <b-field label="色テーマ">
+          <b-select v-model="color">
+            <option
+              v-for="palette in colorSet"
+              :value="palette.color"
+              :key="palette.color">
+              {{ palette.label }}
+            </option>
+          </b-select>
+        </b-field>
+        <b-field label="ページ追加時にコピー">
+          <b-switch v-model="note.isCopyMode">
+          </b-switch>
+        </b-field>
       </b-field>
-      <label class="label">色テーマ</label>
       <b-field grouped position="is-centered">
-        <b-select v-model="color">
-          <option
-            v-for="palette in colorSet"
-            :value="palette.color"
-            :key="palette.color">
-            {{ palette.label }}
-          </option>
-        </b-select>
-      </b-field>
-      <label class="label">再生速度 {{ note.fps }}fps</label>
-      <b-field grouped position="is-centered">
-        <b-slider v-model="note.fps" :min="1" :max="30"></b-slider>
-      </b-field>
-      <label class="label">透過枚数 {{ note.onionRange }}ページ</label>
-      <b-field grouped position="is-centered">
-        <b-slider v-model="note.onionRange" :min="0" :max="3" tooltip ticks></b-slider>
+        <b-field :label="'再生速度' + ('00' + note.fps).slice(-2) + 'fps'" expanded>
+          <b-slider v-model="note.fps" :min="1" :max="30"></b-slider>
+        </b-field>
+        <b-field :label="`透過枚数 ${note.onionRange}枚`" expanded>
+          <b-slider v-model="note.onionRange" :min="0" :max="3" tooltip ticks></b-slider>
+        </b-field>
       </b-field>
     </section>
   </div>
