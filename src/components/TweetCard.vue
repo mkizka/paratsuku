@@ -51,7 +51,6 @@ import { noteInstance } from '@/store/note';
 
 @Component
 export default class TweetCard extends Vue {
-  private loginUrl: string = '';
   private isAuthenticated: boolean = false;
   private gif: string = '';
   private text: string = 'https://para.tsukuriga.net #tsukuriga';
@@ -75,12 +74,13 @@ export default class TweetCard extends Vue {
     });
     const json: { isAuthenticated: boolean, loginPath: string } = await response.json();
     this.isAuthenticated = json.isAuthenticated;
-    this.loginUrl = noteInstance.apiUrl + json.loginPath;
   }
 
   private login(): void {
-    const loginWindow = window.open(this.loginUrl, 'ログイン',
-      'width=800, height=600, menubar=no, toolbar=no, scrollbars=yes');
+    const loginWindow = window.open(
+      noteInstance.apiUrl + '/../login/twitter/?next=/para/callback', 'ログイン',
+      'width=800, height=600, menubar=no, toolbar=no, scrollbars=yes'
+    );
     const loginDetectInterval = setInterval(() => {
       if (loginWindow!.closed) {
         clearInterval(loginDetectInterval);
