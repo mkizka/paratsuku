@@ -34,7 +34,7 @@ export default class App extends Vue {
         message: `アップデート(v${this.version} -> v${latest.version})があります。更新しますか？<br>` +
           '<span class="help">一部の環境ではこの機能は動作しません。キャッシュのクリア、スーパーリロード(Shift + F5など)をお試しください</span>',
         type: 'is-dark',
-        onConfirm: () => document.location.reload(true)
+        onConfirm: () => location.reload(true)
       });
     }
   }
