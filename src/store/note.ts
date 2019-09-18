@@ -9,6 +9,7 @@ export class Note {
   public pageIndex: number = 0;
   public fps: number = 12;
   public onionRange: 0 | 1 | 2 | 3 = 2;
+  public isCopyMode: boolean = false;
   public isPlaying: boolean = false;
   public apiUrl: string = process.env.VUE_APP_API_URL || 'https://tsukuriga.net/para';
 
@@ -177,6 +178,8 @@ export class Note {
     if (this.pageIndex >= this.pages.length) {
       if (isLoop) {
         this.pageIndex = 0;
+      } else if (this.isCopyMode) {
+        this.pages.push(this.relativePage(-1).clone());
       } else {
         this.pages.push(new Page());
       }
